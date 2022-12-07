@@ -1,0 +1,1 @@
+Wed Dec 7th 2022: added init_database.py file, added connection to sqlite and create tables commands lists
