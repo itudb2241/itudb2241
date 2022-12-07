@@ -51,6 +51,15 @@ create_tables_commands = [
     """,
     """
         CREATE TABLE IF NOT EXISTS CombinedShutouts (
+            Year INTEGER,
+            Month INTEGER,
+            Day INTEGER,
+            TmId TEXT,
+            OppId TEXT,
+            RP TEXT,
+            IDgoalie1 TEXT,
+            IDgoalie2 TEXT,
+        )
     """,
     """
         CREATE TABLE IF NOT EXISTS Goalies (
