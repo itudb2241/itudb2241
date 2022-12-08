@@ -10,18 +10,16 @@ create_tables_commands = [
         CREATE TABLE IF NOT EXISTS abbreviations (
             Type TEXT,
             Code TEXT,
-            FullName TEXT,
-        )
-    """,
+            FullName TEXT
+        )""",
     """
         CREATE TABLE IF NOT EXISTS AwardsCoaches (
             CoachId TEXT,
             Award TEXT,
             Year INTEGER,
             LgId TEXT,
-            Note TEXT,
-        )
-    """,
+            Note TEXT
+        )""",
     """
         CREATE TABLE IF NOT EXISTS AwardsPlayers (
             PlayerId TEXT,
@@ -29,9 +27,8 @@ create_tables_commands = [
             Year INTEGER,
             LgId TEXT,
             Note TEXT,
-            Pos TEXT,
-        )
-    """,
+            Pos TEXT
+        )""",
     """
         CREATE TABLE IF NOT EXISTS Coaches (
             CoachId TEXT,
@@ -46,7 +43,7 @@ create_tables_commands = [
             postG INTEGER,
             postW INTEGER,
             postL INTEGER,
-            postT INTEGER,
+            postT INTEGER
         )
     """,
     """
@@ -58,7 +55,7 @@ create_tables_commands = [
             OppId TEXT,
             RP TEXT,
             IDgoalie1 TEXT,
-            IDgoalie2 TEXT,
+            IDgoalie2 TEXT
         )
     """,
     """
@@ -85,7 +82,7 @@ create_tables_commands = [
             POSTENG INTEGER,
             POSTSHO INTEGER,
             POSTGA INTEGER,
-            POSTSA INTEGER,
+            POSTSA INTEGER
         )
     """,
     """
@@ -100,7 +97,7 @@ create_tables_commands = [
             L INTEGER,
             T INTEGER,
             SHO INTEGER,
-            GA INTEGER,
+            GA INTEGER
         )
     """,
     """
@@ -112,14 +109,15 @@ create_tables_commands = [
             W INTEGER,
             L INTEGER,
             SA INTEGER,
-            GA INTEGER,
+            GA INTEGER
+        )
     """,
     """
         CREATE TABLE IF NOT EXISTS HOF (
             Year INTEGER,
             HOFId TEXT,
             Name TEXT,
-            Category TEXT,
+            Category TEXT
         )
     """,
     """
@@ -154,7 +152,7 @@ create_tables_commands = [
             DeathDay INTEGER,
             DeathCountry TEXT,
             DeathState TEXT,
-            DeathCity TEXT,
+            DeathCity TEXT
         )
     """,
     """
@@ -189,7 +187,7 @@ create_tables_commands = [
             PostSHG INTEGER,
             PostSHA INTEGER,
             PostGWG INTEGER,
-            PostSOG INTEGER,
+            PostSOG INTEGER
             )
     """,
     """
@@ -203,7 +201,7 @@ create_tables_commands = [
             G INTEGER,
             A INTEGER,
             Pts INTEGER,
-            PIM INTEGER,
+            PIM INTEGER
         )
     """,
     """
@@ -214,7 +212,7 @@ create_tables_commands = [
             TmId TEXT,
             S INTEGER,
             G INTEGER,
-            GDG INTEGER,
+            GDG INTEGER
         )
     """,
     """
@@ -231,7 +229,7 @@ create_tables_commands = [
             T INTEGER,
             GoalsWinner INTEGER,
             GoalsLoser INTEGER,
-            Note TEXT,
+            Note TEXT
         )
     """,
     """
@@ -248,7 +246,7 @@ create_tables_commands = [
             T INTEGER,
             Pts INTEGER,
             Name TEXT,
-            PIM INTEGER,
+            PIM INTEGER
         )
     """,
     """
@@ -263,7 +261,7 @@ create_tables_commands = [
             L INTEGER,
             T INTEGER,
             GF INTEGER,
-            GA INTEGER,
+            GA INTEGER
         )
     """,
     """
@@ -310,7 +308,7 @@ create_tables_commands = [
             AprW INTEGER,
             AprL INTEGER,
             AprT INTEGER,
-            AprOL INTEGER,
+            AprOL INTEGER
         )
     """,
     """
@@ -331,7 +329,8 @@ create_tables_commands = [
             SHA INTEGER,
             PKG INTEGER,
             PKC INTEGER,
-            SHF INTEGER,
+            SHF INTEGER
+            )
     """,
     """
         CREATE TABLE IF NOT EXISTS TeamsSC (
@@ -344,7 +343,7 @@ create_tables_commands = [
             T INTEGER,
             GF INTEGER,
             GA INTEGER,
-            PIM INTEGER,
+            PIM INTEGER
         )
     """,
     """
@@ -356,7 +355,14 @@ create_tables_commands = [
             W INTEGER,
             L INTEGER,
             T INTEGER,
-            OTL INTEGER,
+            OTL INTEGER
         )
     """,
 ]
+
+
+for command in create_tables_commands:
+    c.execute(command)
+
+conn.commit()
+
