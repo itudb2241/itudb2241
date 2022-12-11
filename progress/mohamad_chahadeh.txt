@@ -1,2 +1,3 @@
 Wed Dec 7th 2022: added init_database.py file, added connection to sqlite and create tables commands lists
-Thu Dec 8th 2022: completed table creation commands in init_database.py, added insert commands for all tables. created and initalised tables in the database
+Thu Dec 8th 2022: completed table creation commands in init_database.py, added insert commands for all tables. created and initalised tables in the database.
+Sun Dec 11th 2022: added server.html, added index.html template for "/" route with basic html structure and css styling
