@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 import sqlite3
 
 app = Flask(__name__)
@@ -21,23 +21,33 @@ def players():
 
     return render_template('players.html', players=players)
 
-from flask import request, redirect
 @app.route('/addplayer')
 def addplayer():
-
     return render_template('addplayer.html')
 
 @app.route('/addplayer', methods=['POST'])
 def addplayer1():
-    connection = sqlite3.connect('database.db')
-    cursor = connection.cursor()
-    name = request.form['pname']
-    playername= cursor.execute('INSERT INTO Master VALUES ({pname})')
-    
 
-    cursor.execute(playername, tuple(name))
-    connection.commit()
-    connection.close()
+    try:
+        connection = sqlite3.connect('database.db')
+        cursor = connection.cursor()
+        (playerId, firstName, lastName, playerHeight, playerWeight) = (request.form['playerId'], request.form['firstName'], request.form['lastName'], request.form['playerHeight'], request.form['playerWeight'])
+        cursor.execute('INSERT INTO Master (playerId, firstName, lastName, height, weight) VALUES (?, ?, ?, ?, ?)', (playerId, firstName, lastName, playerHeight, playerWeight))
+        print(cursor.rowcount)
+        connection.commit()
+
+        myRow = cursor.execute('SELECT * FROM Master WHERE playerId = ?', (playerId,)).fetchone()
+
+        print(myRow)
+        
+        cursor.close()
+    except sqlite3.Error as error:
+        print("Failed to insert data into sqlite table", error)
+    finally:
+        if (connection):
+            connection.close()
+            print("The SQLite connection is closed")
+
     return render_template('addplayer.html')
 
 @app.route('/player/<playerId>')
@@ -51,7 +61,7 @@ def player_info(playerId):
     goalies = cursor.execute('SELECT * FROM Goalies WHERE playerId = ?', (playerId,)).fetchall()
     print(awards)
 
-    return render_template('players.html', player=player, players=players,awards=awards, goalies=goalies)
+    return render_template('players.html', player=player, players= players,awards=awards if awards is not None and len(awards) > 0 else None, goalies=goalies if goalies is not None and len(goalies) > 0 else None)
 
 
 if __name__ == '__main__':

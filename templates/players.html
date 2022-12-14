@@ -62,7 +62,7 @@
 
         <div id="awards">
             <h2>Awards Earned:</h2>
-
+            {% if awards %}
             <table>
                 <tr>
                     <th>
@@ -94,11 +94,14 @@
                 {% endfor %}
 
             </table>
+            {% else %}
+            <p>This player has not awards.</p>
+            {% endif %}
         </div>
 
         <div id="goalies">
             <h2>Goals Scored:</h2>
-            
+            {% if goalies %}
             <table>
                 <tr>
                     <th>
@@ -134,6 +137,10 @@
                 {% endfor %}
 
             </table>
+
+            {% else %}
+            <p>This player has not scored any goals.</p>
+            {% endif %}
 
 
         </div>

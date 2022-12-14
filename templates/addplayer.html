@@ -6,16 +6,7 @@
     <title>Add Player</title>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/global.css') }}">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/js/standalone/selectize.min.js" integrity="sha256-+C0A5Ilqmu4QcSPxrlGpaZxJ04VjsRjKu+G82kl5UJk=" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/css/selectize.bootstrap3.min.css" integrity="sha256-ze/OEYGcFbPRmvCnrSeKbRTtjG4vGLHXgOqsyLFTRjg=" crossorigin="anonymous" />
-    <script>
-        $(document).ready(function () {
-        $('select').selectize({
-            sortField: 'text'
-        });
-    });
-    </script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/addplayer.css') }}">
 
 </head>
 <body>
@@ -28,29 +19,23 @@
         <a href="/stats">Stats</a>
     </nav>
     <form action="/addplayer" method="POST" class="mx-1 mx-md-4">
+        <h1>Add Player: </h1>
+        <label for="playerId">Player ID:</label>
+        <input type="text" name="playerId" placeholder="Player ID" />
 
-        <label for="pname">Player Name:</label><br>
-        <input type="text" id="pname" name="pname"><br><br>
+        <label for="firstName">Player First Name:</label>
+        <input type="text" name="firstName" placeholder="First Name" />
 
-        <label for="pnumber">Player Number:</label><br>
-        <input type="text" id="pnumber" name="pnumber"><br><br>
+        <label for="lastName">Last Name:</label>
+        <input type="text" name="lastName" placeholder="Last Name" />
 
-        <label for="pposition">Player Position:</label><br>
-        <input type="text" id="pposition" name="pposition"><br><br>
+        <label for="playeHeight">Height:</label>
+        <input type="number" name="playerHeight" placeholder="Ex: 189cm" />
 
-        <label for="pheight">Player Height:</label><br>
-        <input type="text" id="pheight" name="pheight"><br><br>
+        <label for="playerWeight">Weight:</label>
+        <input type="number" name="playerWeight" placeholder="Ex: 72kg" />
 
-        <label for="pweight">Player Weight:</label><br>
-        <input type="text" id="pweight" name="pweight"><br><br>
-
-        <label for="pbirtday">Player Birthdate:</label><br>
-        <input type="text" id="pbirtday" name="pbirtday"><br><br>
-
-        <label for="pbirthplace">Player Birtplace:</label><br>
-        <input type="text" id="pbirthplace" name="pbirthplace"><br><br>
-        
-        <input type="submit" value="Submit">
+        <input type="submit" value="Add">
 
       </form>
 </body>
