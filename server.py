@@ -28,11 +28,11 @@ def player_info(playerId):
     cursor = connection.cursor()
     players = cursor.execute('SELECT playerId, firstName, lastName FROM Master WHERE playerId NOT NULL').fetchall()
     player = cursor.execute('SELECT * FROM Master WHERE playerId = ?', (playerId,)).fetchone()
-    goalies = cursor.execute('SELECT ALL FROM Goalies WHERE playerId = ?', (playerId,)).fetchall()
+    awards = cursor.execute('SELECT * FROM AwardsPlayers WHERE playerId = ?', (playerId,)).fetchall()
+    goalies = cursor.execute('SELECT * FROM Goalies WHERE playerId = ?', (playerId,)).fetchall()
+    print(awards)
 
-
-
-    return render_template('players.html', player=player, players=players)
+    return render_template('players.html', player=player, players=players,awards=awards, goalies=goalies)
 
 
 if __name__ == '__main__':

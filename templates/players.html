@@ -48,7 +48,7 @@
     <div id="details-container">
 
         <div id="player-info">
-            <h2>Personal Info</h2>
+            <h2>Personal Info:</h2>
             <p>Player Name: <span id="player-name">{{player[3]}} {{player[4]}}</span></p>
             <p>Player Number: <span id="player-number"></span></p>
             <p>Player Position: <span id="player-position"></span></p>
@@ -57,7 +57,86 @@
             <p>Player Birthdate: <span id="player-birthdate">{{player[21]}}/{{player[20]}}/{{player[19]}}</span></p>
             <p>Player Birthplace: <span id="player-birthplace">{{player[22]}}</span></p>
 
-    </div>
+        </div>
+
+
+        <div id="awards">
+            <h2>Awards Earned:</h2>
+
+            <table>
+                <tr>
+                    <th>
+                        Year
+                    </th>
+                    <th>
+                        League
+                    </th>
+                    <th>
+                        Award
+                    </th>
+                </tr>
+
+                {% for award in awards %}
+
+                <tr>
+                    <td>
+                        {{ award[2] }}
+                    </td>
+                    <td>
+                        {{ award[3] }}
+                    </td>
+
+                    <td>
+                        {{ award[1] }}
+                    </td>
+                </tr>
+
+                {% endfor %}
+
+            </table>
+        </div>
+
+        <div id="goalies">
+            <h2>Goals Scored:</h2>
+            
+            <table>
+                <tr>
+                    <th>
+                        Year
+                    </th>
+                    <th>
+                        Team
+                    </th>
+                    <th>
+                        League
+                    </th>
+                    <th>
+                        Points
+                    </th>
+                </tr>
+
+                {% for goal in goalies %}
+
+                <tr>
+                    <td>
+                        {{ goal[1] }}
+                    </td>
+                    <td>
+                        {{ goal[3] }}
+                    </td>
+                    <td>
+                        {{ goal[4] }}
+                    </td>
+                    <td>
+                        {{ goal[6] }}
+                    </td>
+
+                {% endfor %}
+
+            </table>
+
+
+        </div>
 
     {% endif %}
 
