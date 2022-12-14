@@ -390,7 +390,7 @@ import pandas as pd
 for csv_file in csv_files:
 
     df = pd.read_csv('data/' + csv_file, on_bad_lines='skip')
-    df.to_sql(csv_file[:-4], conn, if_exists='replace', index=False)
+    df.to_sql(csv_file[:-4], conn, if_exists='append', index=False)
 
 conn.commit()
 
