@@ -1,7 +1,6 @@
 from flask import Flask, render_template
 import sqlite3
 
-
 app = Flask(__name__)
 
 app.config.update(
@@ -22,7 +21,6 @@ def players():
     connection.close()
 
     return render_template('players.html', players=players)
-
 
 if __name__ == '__main__':
     app.run(debug=True)

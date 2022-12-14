@@ -3,6 +3,7 @@
 <head>
     <meta charset='utf-8'>
     <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+<<<<<<< HEAD
     <title>Player Info</title>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/global.css') }}">
@@ -44,5 +45,39 @@
     </div>
     </div>
 
+=======
+    <title>The Hockey Archive</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+</head>
+<body>
+
+    <nav class="nav">
+            <h2>The Hockey Archive</h2>
+            <a  href="/">Home</a>
+            <a class="active" href="/players">Players</a>
+            <a href="/teams">Teams</a>
+            <a href="/games">Games</a>
+            <a href="/stats">Stats</a>
+    </nav>
+    
+
+    <div id="title">
+        <h1>The Hockey Archive</h1>
+        <p>Find Historical Data and Stats for Teams, Players, Coaches, Leagues and Championships</p>
+    </div>
+
+    <div id="players">
+        <h2>Players</h2>
+        <p>Find historical data and stats for players</p>
+        <div id="player-list">
+            <ul>
+                {% for player in players %}
+                    <li><a href="/players/{{ player.id }}">{{ player.name }}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+
+>>>>>>> 17868c5635a2e50d8dfb43766a1718d995f7f9cb
 </body>
 </html>
