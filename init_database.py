@@ -31,9 +31,9 @@ create_tables_commands = [
         )""",
     """
         CREATE TABLE IF NOT EXISTS Coaches (
-            CoachId TEXT,
+            CoachId TEXT PRIMARY KEY,
             Year INTEGER,
-            TmId TEXT,
+            TmId TEXT FOREIGN KEY REFERENCES Teams(TmId),
             LgId TEXT,
             Stint INTEGER,
             G INTEGER,
@@ -60,10 +60,10 @@ create_tables_commands = [
     """,
     """
         CREATE TABLE IF NOT EXISTS Goalies (
-            PlayerId TEXT,
+            PlayerId TEXT FOREIGN KEY REFERENCES Master(PlayerId),
             Year INTEGER,
             Stint INTEGER,
-            TmId TEXT,
+            TmId TEXT FOREIGN KEY REFERENCES Teams(TmId),
             LgId TEXT,
             GP INTEGER,
             Min INTEGER,
@@ -87,9 +87,9 @@ create_tables_commands = [
     """,
     """
         CREATE TABLE IF NOT EXISTS GoaliesSC (
-            PlayerId TEXT,
+            PlayerId TEXT FOREIGN KEY REFERENCES Master(PlayerId),
             Year INTEGER,
-            TmId INTEGER,
+            TmId INTEGER FOREIGN KEY REFERENCES Teams(TmId),
             LgId TEXT,
             GP INTEGER,
             Min INTEGER,
@@ -122,8 +122,8 @@ create_tables_commands = [
     """,
     """
         CREATE TABLE IF NOT EXISTS Master (
-            PlayerId TEXT,
-            CoachId TEXT,
+            PlayerId TEXT PRIMARY KEY,
+            CoachId TEXT FOREIGN KEY REFERENCES Coaches(CoachId),
             HOFId TEXT,
             FirstName TEXT,
             LastName TEXT,
@@ -157,10 +157,10 @@ create_tables_commands = [
     """,
     """
         CREATE TABLE IF NOT EXISTS Scoring (
-            PlayerId TEXT,
+            PlayerId TEXT FOREIGN KEY REFERENCES Master(PlayerId),
             Year INTEGER,
             Stint INTEGER,
-            TmId TEXT,
+            TmId TEXT FOREIGN KEY REFERENCES Teams(TmId),
             LgId TEXT,
             Pos TEXT,
             GP INTEGER,
@@ -192,9 +192,9 @@ create_tables_commands = [
     """,
     """
         CREATE TABLE IF NOT EXISTS ScoringSC (
-            PlayerId TEXT,
+            PlayerId TEXT FOREIGN KEY REFERENCES Master(PlayerId),
             Year INTEGER,
-            TmId TEXT,
+            TmId TEXT FOREIGN KEY REFERENCES Teams(TmId),
             LgId TEXT,
             Pos TEXT,
             GP INTEGER,
@@ -236,7 +236,7 @@ create_tables_commands = [
         CREATE TABLE IF NOT EXISTS Teams (
             Year INTEGER,
             LgId TEXT,
-            TmId TEXT,
+            TmId TEXT PRIMARY KEY,
             FranchId TEXT,
             DivId TEXT,
             Rank INTEGER,

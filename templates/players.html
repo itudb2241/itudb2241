@@ -11,8 +11,8 @@
 
     <nav class="nav">
             <h2>The Hockey Archive</h2>
-            <a class="active" href="/">Home</a>
-            <a href="/players">Players</a>
+            <a  href="/">Home</a>
+            <a class="active" href="/players">Players</a>
             <a href="/teams">Teams</a>
             <a href="/games">Games</a>
             <a href="/stats">Stats</a>
@@ -23,5 +23,17 @@
         <h1>The Hockey Archive</h1>
         <p>Find Historical Data and Stats for Teams, Players, Coaches, Leagues and Championships</p>
     </div>
+
+    <div id="players">
+        <h2>Players</h2>
+        <p>Find historical data and stats for players</p>
+        <div id="player-list">
+            <ul>
+                {% for player in players %}
+                    <li><a href="/players/{{ player.id }}">{{ player.name }}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+
 </body>
 </html>
