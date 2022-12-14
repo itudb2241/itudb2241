@@ -36,6 +36,7 @@ create_tables_commands = [
             TmId TEXT,
             LgId TEXT,
             Stint INTEGER,
+            notes TEXT,
             G INTEGER,
             W INTEGER,
             L INTEGER,
