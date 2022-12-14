@@ -21,6 +21,25 @@ def players():
 
     return render_template('players.html', players=players)
 
+from flask import request, redirect
+@app.route('/addplayer')
+def addplayer():
+
+    return render_template('addplayer.html')
+
+@app.route('/addplayer', methods=['POST'])
+def addplayer1():
+    connection = sqlite3.connect('database.db')
+    cursor = connection.cursor()
+    name = request.form['pname']
+    playername= cursor.execute('INSERT INTO Master VALUES ({pname})')
+    
+
+    cursor.execute(playername, tuple(name))
+    connection.commit()
+    connection.close()
+    return render_template('addplayer.html')
+
 @app.route('/player/<playerId>')
 def player_info(playerId):
 
