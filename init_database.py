@@ -14,7 +14,7 @@ create_tables_commands = [
         )""",
     """
         CREATE TABLE IF NOT EXISTS AwardsCoaches (
-            CoachId TEXT,
+            CoachId TEXT REFERENCES Coaches (coachID),
             Award TEXT,
             Year INTEGER,
             LgId TEXT,
@@ -22,7 +22,7 @@ create_tables_commands = [
         )""",
     """
         CREATE TABLE IF NOT EXISTS AwardsPlayers (
-            PlayerId TEXT,
+            PlayerId TEXT REFERENCES Master (playerID),
             Award TEXT,
             Year INTEGER,
             LgId TEXT,
@@ -31,9 +31,9 @@ create_tables_commands = [
         )""",
     """
         CREATE TABLE IF NOT EXISTS Coaches (
-            CoachId TEXT PRIMARY KEY,
+            CoachId TEXT REFERENCES Master (coachID),
             Year INTEGER,
-            TmId TEXT,
+            TmId TEXT REFERENCES Teams (tmID),
             LgId TEXT,
             Stint INTEGER,
             notes TEXT,
@@ -44,9 +44,7 @@ create_tables_commands = [
             postG INTEGER,
             postW INTEGER,
             postL INTEGER,
-            postT INTEGER,
-            FOREIGN KEY (TmId)
-                REFERENCES Teams(TmId)
+            postT INTEGER
         )
     """,
     """
@@ -54,7 +52,7 @@ create_tables_commands = [
             Year INTEGER,
             Month INTEGER,
             Day INTEGER,
-            TmId TEXT,
+            TmId TEXT REFERENCES Teams (year),
             OppId TEXT,
             RP TEXT,
             IDgoalie1 TEXT,
@@ -63,10 +61,10 @@ create_tables_commands = [
     """,
     """
         CREATE TABLE IF NOT EXISTS Goalies (
-            PlayerId TEXT,
+            PlayerId TEXT REFERENCES Master (playerID),
             Year INTEGER,
             Stint INTEGER,
-            TmId TEXT,
+            TmId TEXT REFERENCES Teams (tmID),
             LgId TEXT,
             GP INTEGER,
             Min INTEGER,
@@ -85,18 +83,14 @@ create_tables_commands = [
             POSTENG INTEGER,
             POSTSHO INTEGER,
             POSTGA INTEGER,
-            POSTSA INTEGER,
-            FOREIGN KEY (TmId)
-                REFERENCES Teams(TmId)
-            FOREIGN KEY (PlayerId)
-                REFERENCES Master(PlayerId)
+            POSTSA INTEGER
         )
     """,
     """
         CREATE TABLE IF NOT EXISTS GoaliesSC (
-            PlayerId TEXT,
+            PlayerId TEXT REFERENCES Master (playerID),
             Year INTEGER,
-            TmId INTEGER,
+            TmId INTEGER REFERENCES Teams (tmID),
             LgId TEXT,
             GP INTEGER,
             Min INTEGER,
@@ -104,17 +98,13 @@ create_tables_commands = [
             L INTEGER,
             T INTEGER,
             SHO INTEGER,
-            GA INTEGER,
-            FOREIGN KEY (TmId)
-                REFERENCES Teams(TmId),
-            FOREIGN KEY (PlayerId)
-                REFERENCES Master(PlayerId)
+            GA INTEGER
         )
     """,
     """
         CREATE TABLE IF NOT EXISTS GoaliesShootout (
-            PlayerId TEXT,
-            Year INTEGER,
+            PlayerId TEXT REFERENCES Master (playerID),
+            Year INTEGER REFERENCES Teams (tmID),
             Stint INTEGER,
             TmId TEXT,
             W INTEGER,
@@ -133,9 +123,9 @@ create_tables_commands = [
     """,
     """
         CREATE TABLE IF NOT EXISTS Master (
-            PlayerId TEXT PRIMARY KEY,
-            CoachId TEXT,
-            HOFId TEXT,
+            PlayerId TEXT,
+            CoachId TEXT REFERENCES Coaches (coachID),
+            HOFId TEXT REFERENCES HOF (hofID),
             FirstName TEXT,
             LastName TEXT,
             NameNote TEXT,
@@ -163,17 +153,15 @@ create_tables_commands = [
             DeathDay INTEGER,
             DeathCountry TEXT,
             DeathState TEXT,
-            DeathCity TEXT,
-            FOREIGN KEY (CoachId)
-                REFERENCES Coaches(CoachId)
+            DeathCity TEXT
         )
     """,
     """
         CREATE TABLE IF NOT EXISTS Scoring (
-            PlayerId TEXT,
+            PlayerId TEXT REFERENCES Master (playerID),
             Year INTEGER,
             Stint INTEGER,
-            TmId TEXT,
+            TmId TEXT REFERENCES Teams (tmID),
             LgId TEXT,
             Pos TEXT,
             GP INTEGER,
@@ -200,38 +188,29 @@ create_tables_commands = [
             PostSHG INTEGER,
             PostSHA INTEGER,
             PostGWG INTEGER,
-            PostSOG INTEGER,
-            FOREIGN KEY (PlayerId)
-                REFERENCES Master(PlayerId),
-            FOREIGN KEY (TmId)
-                REFERENCES Teams(TmId)
-            
+            PostSOG INTEGER
             )
     """,
     """
         CREATE TABLE IF NOT EXISTS ScoringSC (
-            PlayerId TEXT,
+            PlayerId TEXT REFERENCES Master (playerID),
             Year INTEGER,
-            TmId TEXT,
+            TmId TEXT REFERENCES Teams (tmID),
             LgId TEXT,
             Pos TEXT,
             GP INTEGER,
             G INTEGER,
             A INTEGER,
             Pts INTEGER,
-            PIM INTEGER,
-            FOREIGN KEY (TmId)
-                REFERENCES Teams(TmId),
-            FOREIGN KEY (PlayerId)
-                REFERENCES Master(PlayerId)
+            PIM INTEGER
         )
     """,
     """
         CREATE TABLE IF NOT EXISTS ScoringShootout (
-            PlayerId TEXT,
+            PlayerId TEXT REFERENCES Master (playerID),
             Year INTEGER,
             Stint INTEGER,
-            TmId TEXT,
+            TmId TEXT REFERENCES Teams (tmID),
             S INTEGER,
             G INTEGER,
             GDG INTEGER
@@ -275,7 +254,7 @@ create_tables_commands = [
         CREATE TABLE IF NOT EXISTS TeamsHalf (
             Year INTEGER,
             LgId TEXT,
-            TmId TEXT,
+            TmId TEXT REFERENCES Teams (tmID),
             Half INTEGER,
             Rank INTEGER,
             G INTEGER,
@@ -290,7 +269,7 @@ create_tables_commands = [
         CREATE TABLE IF NOT EXISTS TeamSplits (
             Year INTEGER,
             LgId TEXT,
-            TmId TEXT,
+            TmId TEXT REFERENCES Teams (tmID),
             HW INTEGER,
             HL INTEGER,
             HT INTEGER,
@@ -337,7 +316,7 @@ create_tables_commands = [
         CREATE TABLE IF NOT EXISTS TeamsPost (
             Year INTEGER,
             LgId TEXT,
-            TmId TEXT,
+            TmId TEXT REFERENCES Teams (tmID),
             G INTEGER,
             W INTEGER,
             L INTEGER,
@@ -358,7 +337,7 @@ create_tables_commands = [
         CREATE TABLE IF NOT EXISTS TeamsSC (
             Year INTEGER,
             LgId TEXT,
-            TmId TEXT,
+            TmId TEXT REFERENCES Teams (tmID),
             G INTEGER,
             W INTEGER,
             L INTEGER,
@@ -372,7 +351,7 @@ create_tables_commands = [
         CREATE TABLE IF NOT EXISTS TeamVsTeam (
             Year INTEGER,
             LgId TEXT,
-            TmId TEXT,
+            TmId TEXT REFERENCES Teams (tmID),
             OppTmId TEXT,
             W INTEGER,
             L INTEGER,
