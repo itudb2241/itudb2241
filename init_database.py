@@ -33,7 +33,7 @@ create_tables_commands = [
         CREATE TABLE IF NOT EXISTS Coaches (
             CoachId TEXT PRIMARY KEY,
             Year INTEGER,
-            TmId TEXT FOREIGN KEY REFERENCES Teams(TmId),
+            TmId TEXT,
             LgId TEXT,
             Stint INTEGER,
             G INTEGER,
@@ -43,7 +43,9 @@ create_tables_commands = [
             postG INTEGER,
             postW INTEGER,
             postL INTEGER,
-            postT INTEGER
+            postT INTEGER,
+            FOREIGN KEY (TmId)
+                REFERENCES Teams(TmId)
         )
     """,
     """
@@ -60,10 +62,10 @@ create_tables_commands = [
     """,
     """
         CREATE TABLE IF NOT EXISTS Goalies (
-            PlayerId TEXT FOREIGN KEY REFERENCES Master(PlayerId),
+            PlayerId TEXT,
             Year INTEGER,
             Stint INTEGER,
-            TmId TEXT FOREIGN KEY REFERENCES Teams(TmId),
+            TmId TEXT,
             LgId TEXT,
             GP INTEGER,
             Min INTEGER,
@@ -82,14 +84,18 @@ create_tables_commands = [
             POSTENG INTEGER,
             POSTSHO INTEGER,
             POSTGA INTEGER,
-            POSTSA INTEGER
+            POSTSA INTEGER,
+            FOREIGN KEY (TmId)
+                REFERENCES Teams(TmId)
+            FOREIGN KEY (PlayerId)
+                REFERENCES Master(PlayerId)
         )
     """,
     """
         CREATE TABLE IF NOT EXISTS GoaliesSC (
-            PlayerId TEXT FOREIGN KEY REFERENCES Master(PlayerId),
+            PlayerId TEXT,
             Year INTEGER,
-            TmId INTEGER FOREIGN KEY REFERENCES Teams(TmId),
+            TmId INTEGER,
             LgId TEXT,
             GP INTEGER,
             Min INTEGER,
@@ -97,7 +103,11 @@ create_tables_commands = [
             L INTEGER,
             T INTEGER,
             SHO INTEGER,
-            GA INTEGER
+            GA INTEGER,
+            FOREIGN KEY (TmId)
+                REFERENCES Teams(TmId),
+            FOREIGN KEY (PlayerId)
+                REFERENCES Master(PlayerId)
         )
     """,
     """
@@ -123,7 +133,7 @@ create_tables_commands = [
     """
         CREATE TABLE IF NOT EXISTS Master (
             PlayerId TEXT PRIMARY KEY,
-            CoachId TEXT FOREIGN KEY REFERENCES Coaches(CoachId),
+            CoachId TEXT,
             HOFId TEXT,
             FirstName TEXT,
             LastName TEXT,
@@ -152,15 +162,17 @@ create_tables_commands = [
             DeathDay INTEGER,
             DeathCountry TEXT,
             DeathState TEXT,
-            DeathCity TEXT
+            DeathCity TEXT,
+            FOREIGN KEY (CoachId)
+                REFERENCES Coaches(CoachId)
         )
     """,
     """
         CREATE TABLE IF NOT EXISTS Scoring (
-            PlayerId TEXT FOREIGN KEY REFERENCES Master(PlayerId),
+            PlayerId TEXT,
             Year INTEGER,
             Stint INTEGER,
-            TmId TEXT FOREIGN KEY REFERENCES Teams(TmId),
+            TmId TEXT,
             LgId TEXT,
             Pos TEXT,
             GP INTEGER,
@@ -187,21 +199,30 @@ create_tables_commands = [
             PostSHG INTEGER,
             PostSHA INTEGER,
             PostGWG INTEGER,
-            PostSOG INTEGER
+            PostSOG INTEGER,
+            FOREIGN KEY (PlayerId)
+                REFERENCES Master(PlayerId),
+            FOREIGN KEY (TmId)
+                REFERENCES Teams(TmId)
+            
             )
     """,
     """
         CREATE TABLE IF NOT EXISTS ScoringSC (
-            PlayerId TEXT FOREIGN KEY REFERENCES Master(PlayerId),
+            PlayerId TEXT,
             Year INTEGER,
-            TmId TEXT FOREIGN KEY REFERENCES Teams(TmId),
+            TmId TEXT,
             LgId TEXT,
             Pos TEXT,
             GP INTEGER,
             G INTEGER,
             A INTEGER,
             Pts INTEGER,
-            PIM INTEGER
+            PIM INTEGER,
+            FOREIGN KEY (TmId)
+                REFERENCES Teams(TmId),
+            FOREIGN KEY (PlayerId)
+                REFERENCES Master(PlayerId)
         )
     """,
     """
