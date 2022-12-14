@@ -22,5 +22,16 @@ def players():
 
     return render_template('players.html', players=players)
 
+@app.route('/player/<playerId>')
+def player_info(playerId):
+
+    connection= sqlite3.connect("database.db")
+    cursor = connection.cursor()
+    player = cursor.execute('SELECT * FROM Master WHERE playerId = ?', (playerId,)).fetchone()
+
+
+    return render_template('players.html', player=player)
+
+
 if __name__ == '__main__':
     app.run(debug=True)

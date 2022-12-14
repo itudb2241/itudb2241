@@ -35,13 +35,32 @@
 
     <div id="dropdown-container">
         <p>Select a player: </p>
-        <select style="width: 400px;" id="dropdown" placeholder="Select a Player">
+        <select onchange="this.options[this.selectedIndex].value && (window.location.href = '/player/' + this.options[this.selectedIndex].value)" style="width: 400px;" id="dropdown" placeholder="Select a Player">
             <option value="Mohamad">Select a Player</option>
             {% for player in players %}
             <option value="{{ player[0] }}">{{ player[1] }} {{ player[2] }}</option>
             {% endfor %}
         </select>
     </div>
+
+    {% if player %}
+
+    <div id="details-container">
+
+        <div id="player-info">
+            <h2>Personal Info</h2>
+            <p>Player Name: <span id="player-name">{{player[3]}}</span></p>
+            <p>Player Number: <span id="player-number"></span></p>
+            <p>Player Position: <span id="player-position"></span></p>
+            <p>Player Height: <span id="player-height"></span></p>
+            <p>Player Weight: <span id="player-weight"></span></p>
+            <p>Player Birthdate: <span id="player-birthdate"></span></p>
+            <p>Player Birthplace: <span id="player-birthplace"></span></p>
+
+    </div>
+
+    {% endif %}
+
     </div>
 
 </body>
