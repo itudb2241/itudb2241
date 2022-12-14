@@ -28,6 +28,8 @@ def player_info(playerId):
     cursor = connection.cursor()
     players = cursor.execute('SELECT playerId, firstName, lastName FROM Master WHERE playerId NOT NULL').fetchall()
     player = cursor.execute('SELECT * FROM Master WHERE playerId = ?', (playerId,)).fetchone()
+    goalies = cursor.execute('SELECT ALL FROM Goalies WHERE playerId = ?', (playerId,)).fetchall()
+
 
 
     return render_template('players.html', player=player, players=players)
