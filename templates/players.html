@@ -36,7 +36,7 @@
     <div id="dropdown-container">
         <p>Select a player: </p>
         <select onchange="this.options[this.selectedIndex].value && (window.location.href = '/player/' + this.options[this.selectedIndex].value)" style="width: 400px;" id="dropdown" placeholder="Select a Player">
-            <option value="Mohamad">Select a Player</option>
+            <option value="">Select a Player</option>
             {% for player in players %}
             <option value="{{ player[0] }}">{{ player[1] }} {{ player[2] }}</option>
             {% endfor %}

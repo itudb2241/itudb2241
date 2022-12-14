@@ -17,7 +17,6 @@ def players():
     connection = sqlite3.connect('database.db')
     cursor = connection.cursor()
     players = cursor.execute('SELECT playerId, firstName, lastName FROM Master WHERE playerId NOT NULL').fetchall()
-    print(players)
     connection.close()
 
     return render_template('players.html', players=players)
@@ -25,12 +24,13 @@ def players():
 @app.route('/player/<playerId>')
 def player_info(playerId):
 
-    connection= sqlite3.connect("database.db")
+    connection = sqlite3.connect('database.db')
     cursor = connection.cursor()
+    players = cursor.execute('SELECT playerId, firstName, lastName FROM Master WHERE playerId NOT NULL').fetchall()
     player = cursor.execute('SELECT * FROM Master WHERE playerId = ?', (playerId,)).fetchone()
 
 
-    return render_template('players.html', player=player)
+    return render_template('players.html', player=player, players=players)
 
 
 if __name__ == '__main__':
