@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, url_for, redirect
 import sqlite3
 
 app = Flask(__name__)
@@ -63,6 +63,57 @@ def player_info(playerId):
 
     return render_template('players.html', player=player, players= players,awards=awards if awards is not None and len(awards) > 0 else None, goalies=goalies if goalies is not None and len(goalies) > 0 else None)
 
+
+@app.route("/player/<playerId>/addgoalie", methods=['POST'])
+def add_goalie(playerId):
+    GoalieYear = request.form['GoalieYear']
+    GoalieTeam = request.form['GoalieTeam']
+    GoalieLeague = request.form['GoalieLeague']
+    GoaliePoints = request.form['GoaliePoints']
+
+    try:
+        connection = sqlite3.connect('database.db')
+        cursor = connection.cursor()
+        cursor.execute('INSERT INTO Goalies (playerId, year, tmId, lgId, Min) VALUES (?, ?, ?, ?, ?)', (playerId, GoalieYear, GoalieTeam, GoalieLeague, GoaliePoints))
+        print(cursor.rowcount)
+        connection.commit()
+
+        myRow = cursor.execute('SELECT * FROM Goalies WHERE playerId = ?', (playerId,)).fetchone()
+
+        print(myRow)
+        
+        cursor.close()
+    except sqlite3.Error as error:
+        print("Failed to insert data into sqlite table", error)
+    finally:
+        if (connection):
+            connection.close()
+            print("The SQLite connection is closed")
+    
+    return redirect(url_for('player_info', playerId=playerId))
+
+@app.route("/player/<playerId>/addaward", methods=['POST'])
+def add_award(playerId):
+    awardYear = request.form['awardYear']
+    awardLeague = request.form['awardLeague']
+    awardName = request.form['awardName']
+
+    try:
+        connection = sqlite3.connect('database.db')
+        cursor = connection.cursor()
+        cursor.execute('INSERT INTO AwardsPlayers (playerId, year, lgId, award) VALUES (?, ?, ?, ?)', (playerId, awardYear, awardLeague, awardName))
+        print(cursor.rowcount)
+        connection.commit()
+        
+        cursor.close()
+    except sqlite3.Error as error:
+        print("Failed to insert data into sqlite table", error)
+    finally:
+        if (connection):
+            connection.close()
+            print("The SQLite connection is closed")
+    
+    return redirect(url_for('player_info', playerId=playerId))
 
 if __name__ == '__main__':
     app.run(debug=True)
