@@ -53,6 +53,21 @@
             document.getElementById("addGoalieButton").style.display = null;
             document.getElementById("cancelAddGoalieButton").style.display = "none";
         }
+        function enableAddScoring() {
+            if(document.getElementById("no-scoring-table")) document.getElementById("no-scoring-table").style.display = null;
+            document.getElementById("addScoringFormRow").style.display = null;
+            document.getElementById("submitAddScoringButton").style.display = null;
+            document.getElementById("addScoringButton").style.display = "none";
+            document.getElementById("cancelAddScoringButton").style.display = null;
+        }
+
+        function cancelAddScoring() {
+            if(document.getElementById("no-scoring-table")) document.getElementById("no-scoring-table").style.display = "none";
+            document.getElementById("addScoringFormRow").style.display = "none";
+            document.getElementById("submitAddScoringButton").style.display = "none";
+            document.getElementById("addScoringButton").style.display = null;
+            document.getElementById("cancelAddScoringButton").style.display = "none";
+        }
     </script>
 
 </head>
@@ -113,6 +128,7 @@
                     <th>
                         Award
                     </th>
+
                 </tr>
 
                 {% for award in awards %}
@@ -128,6 +144,7 @@
                     <td>
                         {{ award[1] }}
                     </td>
+
                 </tr>
 
                 {% endfor %}
@@ -189,8 +206,142 @@
 
         </div>
 
-        <div id="goalies">
+        <div id="scoring">
             <h2>Goals Scored:</h2>
+            {% if scorings %}
+            <table>
+                <tr>
+                    <th>
+                        Year
+                    </th>
+                    <th>
+                        Team
+                    </th>
+                    <th>
+                        League
+                    </th>
+                    <th>
+                        Position
+                    </th>
+                    <th>
+                        Points
+                    </th>
+
+                    <th>
+
+                    </th>
+                </tr>
+
+                {% for scoring in scorings %}
+
+                <tr>
+                    <td>
+                        {{ scoring[1] }}
+                    </td>
+                    <td>
+                        {{ scoring[3] }}
+                    </td>
+                    <td>
+                        {{ scoring[4] }}
+                    </td>
+                    <td>
+                        {{ scoring[5] }}
+                    </td>
+                    <td>
+                        {{ scoring[9] }}
+                    </td>
+
+                    <td>
+                        <a href="./{{ player[0] }}/deletescoring?year={{ scoring[1] }}&team={{ scoring[3] }}&league={{ scoring[4] }}&position={{ scoring[5] }}&points={{ scoring[9] }}">Delete</a>
+                    </td>
+                    
+                </tr>
+
+                {% endfor %}
+                <form action="./{{ player[0] }}/addscoring" method="POST">
+                <tr id="addScoringFormRow" style="display:none;">
+                    <td>
+                        <input type="number" name="ScoringYear" id="addScoringYear" class="insert-table-input">
+                    </td>
+
+                    <td>
+                        <input type="text" name="ScoringTeam" id="addScoringTeam" class="insert-table-input">
+                    </td>
+                    <td>
+                        <input type="text" name="ScoringLeague" id="addScoringLeague" class="insert-table-input">
+                    </td>
+
+                    <td>
+                        <input type="text" name="ScoringPosition" id="addScoringPosition" class="insert-table-input">
+                    </td>
+
+                    <td>
+                        <input type="text" name="ScoringPoints" id="addScoringPoints" class="insert-table-input">
+                    </td>
+                </tr>
+            <input id="submitAddScoringButton" style="display:none;" type="submit" value="submit">
+            </form>
+        </table>
+            <button id="cancelAddScoringButton" style="display:none;" onclick="cancelAddScoring()">Cancel</button>
+            <button id="addScoringButton" style="display: block;" onclick="enableAddScoring()">Add Scoring</button>
+
+
+            {% else %}
+            <p>This player has not scored any goals.</p>
+
+            <table id="no-scorings-table" style="display: none;">
+                <tr>
+                    <th>
+                        Year
+                    </th>
+                    <th>
+                        Team
+                    </th>
+                    <th>
+                        League
+                    </th>
+                    <th>
+                        Position
+                    </th>
+                    <th>
+                        Points
+                    </th>
+                </tr>
+                <form action="./{{ player[0] }}/addscoring" method="POST">
+                <tr id="addScoringFormRow" style="display:none;">
+                    <td>
+                        <input type="number" name="ScoringYear" id="addScoringYear" class="insert-table-input">
+                    </td>
+
+                    <td>
+                        <input type="text" name="ScoringTeam" id="addScoringTeam" class="insert-table-input">
+                    </td>
+                    <td>
+                        <input type="text" name="ScoringLeague" id="addScoringLeague" class="insert-table-input">
+                    </td>
+
+                    <td>
+                        <input type="text" name="ScoringPosition" id="addScoringPosition" class="insert-table-input">
+                    </td>
+
+                    <td>
+                        <input type="text" name="ScoringPoints" id="addScoringPoints" class="insert-table-input">
+                    </td>
+                </tr>
+            </table>
+            <button id="submitAddScoringButton" style="display:none;" type="submit">submit</button>
+            </form>
+            <button id="cancelAddScoringButton" style="display:none;" onclick="cancelAddScoring()">Cancel</button>
+            <button id="addScoringButton" style="display: block;" onclick="enableAddScoring()">Add Scoring</button>
+
+            {% endif %}
+
+
+        </div>
+
+
+    <div id="goalies">
+            <h2>Goals Saved:</h2>
             {% if goalies %}
             <table>
                 <tr>
@@ -250,7 +401,7 @@
 
 
             {% else %}
-            <p>This player has not scored any goals.</p>
+            <p>This player has not saved any goals.</p>
 
             <table id="no-goalies-table" style="display: none;">
                 <tr>
@@ -295,7 +446,7 @@
 
         </div>
 
-    {% endif %}
+        {% endif %}
 
     </div>
 
