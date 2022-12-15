@@ -15,7 +15,21 @@
         $('select').selectize({
             sortField: 'text'
         });
-    });
+         });
+
+        function enableAddAward() {
+            document.getElementById("addAwardFormRow").style.display = null;
+            document.getElementById("submitAddAwardButton").style.display = null;
+            document.getElementById("addAwardButton").style.display = "none";
+            document.getElementById("cancelAddAwardButton").style.display = null;
+        }
+
+        function cancelAddAward() {
+            document.getElementById("addAwardFormRow").style.display = "none";
+            document.getElementById("submitAddAwardButton").style.display = "none";
+            document.getElementById("addAwardButton").style.display = null;
+            document.getElementById("cancelAddAwardButton").style.display = "none";
+        }
     </script>
 
 </head>
@@ -41,6 +55,8 @@
             <option value="{{ player[0] }}">{{ player[1] }} {{ player[2] }}</option>
             {% endfor %}
         </select>
+
+        <a id="addPlayerButton" href="/addplayer">Add a player</a>
     </div>
 
     {% if player %}
@@ -92,8 +108,25 @@
                 </tr>
 
                 {% endfor %}
+                <tr id="addAwardFormRow" style="display:none;">
+                    <td>
+                        <input type="number" name="awardYear" id="addAwardYear" class="insert-table-input">
+                    </td>
+
+                    <td>
+                        <input type="text" name="awardLeague" id="addAwardLeague" class="insert-table-input">
+                    </td>
+
+                    <td>
+                        <input type="text" name="awardName" id="addAwardName" class="insert-table-input">
+                    </td>
+                </tr>
 
             </table>
+            <button id="submitAddAwardButton" style="display:none;" type="submit">submit</button>
+            <button id="cancelAddAwardButton" style="display:none;" onclick="cancelAddAward()">Cancel</button>
+            <button id="addAwardButton" style="display: block;" onclick="enableAddAward()">Add award</button>
+            
             {% else %}
             <p>This player has not awards.</p>
             {% endif %}
