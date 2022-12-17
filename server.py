@@ -86,9 +86,9 @@ def team_info(tmId):
     coach_id = cursor.execute("SELECT CoachId FROM Coaches WHERE tmId = ?",(tmId,)).fetchall()
     
     coach_id[0] = re.sub('[^A-Za-z0-9]+', '', str(coach_id[0]))
-    print(coach_id[0])
-    coach = cursor.execute("SELECT * FROM Master WHERE CoachId = ?",(str(coach_id[0]),)).fetchall()
-    return render_template('teams.html', team=team, teams= teams,coach_id=coach_id, coach=coach if coach is not None and len(coach) > 0 else None)
+    coach_name = cursor.execute("SELECT NameGiven FROM Master WHERE CoachId = ?",(str(coach_id[0]),)).fetchall()
+    coach_name = re.sub('[^A-Za-z0-9]+', ' ', str(coach_name))
+    return render_template('teams.html', team=team, teams= teams,coach_id=coach_id, coach_name=coach_name)
 
 
 
