@@ -1,4 +1,4 @@
-playerID,year,stint,tmID,lgID,pos,GP,G,A,Pts,PIM,+/-,PPG,PPA,SHG,SHA,GWG,GTG,SOG,PostGP,PostG,PostA,PostPts,PostPIM,Post+/-,PostPPG,PostPPA,PostSHG,PostSHA,PostGWG,PostSOG
+playerID,year,stint,tmID,lgID,pos,GP,G,A,Pts,PIM,PlusMinus,PPG,PPA,SHG,SHA,GWG,GTG,SOG,PostGP,PostG,PostA,PostPts,PostPIM,PostPlusMinus,PostPPG,PostPPA,PostSHG,PostSHA,PostGWG,PostSOG
 aaltoan01,1997,1,ANA,NHL,C,3,0,0,0,0,-1,0,0,0,0,0,0,1,,,,,,,,,,,,
 aaltoan01,1998,1,ANA,NHL,C,73,3,5,8,24,-12,2,1,0,0,0,0,61,4,0,0,0,2,0,0,0,0,0,0,0
 aaltoan01,1999,1,ANA,NHL,C,63,7,11,18,26,-13,1,0,0,0,1,0,102,,,,,,,,,,,,

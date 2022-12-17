@@ -1,4 +1,4 @@
-playerID,year,stint,tmID,lgID,GP,Min,W,L,T/OL,ENG,SHO,GA,SA,PostGP,PostMin,PostW,PostL,PostT,PostENG,PostSHO,PostGA,PostSA
+playerID,year,stint,tmID,lgID,GP,Min,W,L,TOL,ENG,SHO,GA,SA,PostGP,PostMin,PostW,PostL,PostT,PostENG,PostSHO,PostGA,PostSA
 abbotge01,1943,1,BOS,NHL,1,60,0,1,0,,0,7,,,,,,,,,,
 abrahch01,1974,1,NEW,WHA,16,870,8,6,1,0,1,47,504,,,,,,,,,
 abrahch01,1975,1,NEW,WHA,41,2385,18,18,2,1,2,136,1221,1,1,0,0,,0,0,0,
