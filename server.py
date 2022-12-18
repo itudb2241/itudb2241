@@ -46,7 +46,7 @@ def addplayer1():
 def players():
     connection = sqlite3.connect('database.db')
     cursor = connection.cursor()
-    players = cursor.execute('SELECT playerId, firstName, lastName FROM Master WHERE playerId NOT NULL').fetchall()
+    players = cursor.execute('SELECT playerId, firstName, lastName FROM Master WHERE playerId NOT NULL ORDER BY FirstName').fetchall()
     connection.close()
 
     return render_template('players.html', players=players)
@@ -56,13 +56,12 @@ def player_info(playerId):
 
     connection = sqlite3.connect('database.db')
     cursor = connection.cursor()
-    players = cursor.execute('SELECT playerId, firstName, lastName FROM Master WHERE playerId NOT NULL').fetchall()
+    players = cursor.execute('SELECT playerId, firstName, lastName FROM Master WHERE playerId NOT NULL ORDER BY FirstName').fetchall()
     player = cursor.execute('SELECT * FROM Master WHERE playerId = ?', (playerId,)).fetchone()
-    awards = cursor.execute('SELECT awardsPlayersId, Year, LgId, Award FROM AwardsPlayers WHERE playerId = ?', (playerId,)).fetchall()
-    scorings = cursor.execute('SELECT u.scoringId, u.year, u.TmId, u.LgId, u.Pos,u.G, u.A, u.Pts, p.Name FROM (SELECT scoringId, year, tmId, LgId, Pos, Pts, G, A FROM Scoring WHERE playerId = ?) u LEFT JOIN (SELECT year,TmId,LgId, Name FROM Teams) p ON u.TmId = p.TmId AND u.year = p.year', (playerId,)).fetchall()
-    goalies = cursor.execute('SELECT * FROM Goalies WHERE playerId = ?', (playerId,)).fetchall()
-    teams = cursor.execute('Select DISTINCT TmId, Name, LgId from Teams').fetchall() 
-    print(scorings)
+    awards = cursor.execute('SELECT awardsPlayersId, Year, LgId, Award FROM AwardsPlayers WHERE playerId = ? ORDER BY Year', (playerId,)).fetchall()
+    scorings = cursor.execute('SELECT u.scoringId, u.year, u.TmId, u.LgId, u.Pos,u.G, u.A, u.Pts, p.Name FROM (SELECT scoringId, year, tmId, LgId, Pos, Pts, G, A FROM Scoring WHERE playerId = ?) u LEFT JOIN (SELECT year,TmId,LgId, Name FROM Teams) p ON u.TmId = p.TmId AND u.year = p.year WHERE p.name NOT NULL ORDER BY u.Year', (playerId,)).fetchall()
+    goalies = cursor.execute('SELECT * FROM Goalies WHERE playerId = ? ORDER BY Year', (playerId,)).fetchall()
+    teams = cursor.execute('Select DISTINCT TmId, Name, LgId from Teams ORDER BY Name').fetchall() 
     return render_template('players.html', player=player, players= players,awards=awards if awards is not None and len(awards) > 0 else None, goalies=goalies if goalies is not None and len(goalies) > 0 else None, scorings=scorings if scorings is not None and len(scorings) > 0 else None, teams=teams if teams is not None and len(teams) > 0 else None)
 
 
@@ -106,7 +105,7 @@ def add_scoring(playerId):
     try:
         connection = sqlite3.connect('database.db')
         cursor = connection.cursor()
-        cursor.execute('INSERT INTO Scoring (playerId, year, tmId, lgId, pos, Pts) VALUES (?, ?, ?, ?, ?, ?)', (playerId, ScoringYear, ScoringTeam, ScoringLeague, ScoringPosition, ScoringPoints))
+        cursor.execute('INSERT INTO Scoring (playerId, year, tmId, lgId, pos,G,A, Pts) VALUES (?, ?, ?, ?, ?, ?, ?, ?)', (playerId, ScoringYear, ScoringTeam, ScoringLeague, ScoringPosition,ScoringGoals,ScoringAssists, ScoringPoints))
         print(cursor.rowcount)
         connection.commit()
         cursor.close()
