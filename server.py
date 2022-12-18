@@ -72,9 +72,9 @@ def player_info(playerId):
     teams = cursor.execute('Select DISTINCT TmId, Name, LgId from Teams').fetchall() 
     print(scorings)
     try:
-        goaliesteam = goalies[0][3]
+        goaliesteam = goalies[0][4]
         if(goaliesteam != None):
-            goalies_team = cursor.execute('SELECT Name FROM Teams WHERE TmId = ?', (str(goalies[0][3]),)).fetchone()
+            goalies_team = cursor.execute('SELECT Name FROM Teams WHERE TmId = ?', (str(goalies[0][4]),)).fetchone()
     except:
         goaliesteam = None
         goalies_team = None
@@ -206,6 +206,29 @@ def delete_scoring(playerId):
             print("The SQLite connection is closed")
     
     return redirect(url_for('player_info', playerId=playerId))
+
+@app.route("/player/<playerId>/deletegoalie", methods=['GET'])
+def delete_goalie(playerId):
+    
+        args = request.args
+    
+        if not args: return redirect(url_for('player_info', playerId=playerId))
+    
+        try:
+            connection = sqlite3.connect('database.db')
+            cursor = connection.cursor()
+            cursor.execute('DELETE FROM Goalies WHERE goalieId = ?', (args['goalieId'],))
+            connection.commit()
+            
+            cursor.close()
+        except sqlite3.Error as error:
+            print("Failed to delete data into sqlite table", error)
+        finally:
+            if (connection):
+                connection.close()
+                print("The SQLite connection is closed")
+        
+        return redirect(url_for('player_info', playerId=playerId))
 
 @app.route("/player/<playerId>/deleteaward", methods=['GET'])
 def delete_award(playerId):

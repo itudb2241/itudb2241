@@ -408,22 +408,25 @@
 
                 <tr>
                     <td>
-                        {{ goal[1] }}
+                        {{ goal[2] }}
                     </td>
                     <td>
                         {{ goalies_team[0] }}
                     </td>
                     <td>
-                        {{ goal[4] }}
+                        {{ goal[5] }}
                     </td>
                     <td>
-                        {{ goal[6] }}
+                        {{ goal[7] }}
                     </td>
                     <td>
-                        {{ goal[7] }} / {{ goal[8] }} / {{ goal[9] }}
+                        {{ goal[7] }} / {{ goal[9] }} / {{ goal[10] }}
                     </td>
                     <td>
-                        {{ goal[2] }}
+                        {{ goal[13] }}
+                    </td>
+                    <td>
+                        <a href="./{{ player[0] }}/deletegoalie?goalieId={{ goal[0] }}">Delete</a>
                     </td>
 
                 {% endfor %}

@@ -62,6 +62,7 @@ create_tables_commands = [
     """,
     """
         CREATE TABLE IF NOT EXISTS Goalies (
+            GoaliesID INTEGER PRIMARY KEY AUTOINCREMENT,
             PlayerId TEXT REFERENCES Master (playerID),
             Year INTEGER,
             Stint INTEGER,
