@@ -25,12 +25,22 @@
 
 tr {
     padding: 5px 15px;
+    text-align: center;
 }
+
 
 td {
     padding: 5px 15px;
-    text-align: center;
+    min-width: 100px;
 }
 h2{
     margin: 10px 0px;
+}
+
+#player-info > p > span {
+    font-weight: bold;
+}
+
+.insert-table-input {
+    width: 100px;
 }

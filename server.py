@@ -58,12 +58,12 @@ def player_info(playerId):
     cursor = connection.cursor()
     players = cursor.execute('SELECT playerId, firstName, lastName FROM Master WHERE playerId NOT NULL').fetchall()
     player = cursor.execute('SELECT * FROM Master WHERE playerId = ?', (playerId,)).fetchone()
-    awards = cursor.execute('SELECT * FROM AwardsPlayers WHERE playerId = ?', (playerId,)).fetchall()
-    scorings = cursor.execute('SELECT * FROM Scoring WHERE playerId = ?', (playerId,)).fetchall()
+    awards = cursor.execute('SELECT awardsPlayersId, Year, LgId, Award FROM AwardsPlayers WHERE playerId = ?', (playerId,)).fetchall()
+    scorings = cursor.execute('SELECT u.scoringId, u.year, u.TmId, u.LgId, u.Pos,u.G, u.A, u.Pts, p.Name FROM (SELECT scoringId, year, tmId, LgId, Pos, Pts, G, A FROM Scoring WHERE playerId = ?) u LEFT JOIN (SELECT year,TmId,LgId, Name FROM Teams) p ON u.TmId = p.TmId AND u.year = p.year', (playerId,)).fetchall()
     goalies = cursor.execute('SELECT * FROM Goalies WHERE playerId = ?', (playerId,)).fetchall()
-    print(awards)
-
-    return render_template('players.html', player=player, players= players,awards=awards if awards is not None and len(awards) > 0 else None, goalies=goalies if goalies is not None and len(goalies) > 0 else None, scorings=scorings if scorings is not None and len(scorings) > 0 else None)
+    teams = cursor.execute('Select DISTINCT TmId, Name, LgId from Teams').fetchall() 
+    print(scorings)
+    return render_template('players.html', player=player, players= players,awards=awards if awards is not None and len(awards) > 0 else None, goalies=goalies if goalies is not None and len(goalies) > 0 else None, scorings=scorings if scorings is not None and len(scorings) > 0 else None, teams=teams if teams is not None and len(teams) > 0 else None)
 
 
 @app.route('/teams')
@@ -99,6 +99,8 @@ def add_scoring(playerId):
     ScoringTeam = request.form['ScoringTeam']
     ScoringLeague = request.form['ScoringLeague']
     ScoringPosition = request.form['ScoringPosition']
+    ScoringGoals = request.form['ScoringGoals']
+    ScoringAssists = request.form['ScoringAssists']
     ScoringPoints = request.form['ScoringPoints']
 
     try:
@@ -174,7 +176,7 @@ def delete_scoring(playerId):
     try:
         connection = sqlite3.connect('database.db')
         cursor = connection.cursor()
-        cursor.execute('DELETE FROM Scoring WHERE playerId = ? AND year = ? AND tmId = ? AND lgId = ? AND pos = ? AND Pts = ?', (playerId, args.get("year"), args.get("team"), args.get("league"), args.get("position"), args.get("points")))
+        cursor.execute('DELETE FROM Scoring WHERE scoringId = ?', (args['scoringId'],))
         connection.commit()
         
         cursor.close()
@@ -187,6 +189,28 @@ def delete_scoring(playerId):
     
     return redirect(url_for('player_info', playerId=playerId))
 
+@app.route("/player/<playerId>/deleteaward", methods=['GET'])
+def delete_award(playerId):
+
+    args = request.args
+
+    if not args: return redirect(url_for('player_info', playerId=playerId))
+
+    try:
+        connection = sqlite3.connect('database.db')
+        cursor = connection.cursor()
+        cursor.execute('DELETE FROM AwardsPlayers WHERE awardsPlayersId = ?', (args['awardsPlayersId'],))
+        connection.commit()
+        
+        cursor.close()
+    except sqlite3.Error as error:
+        print("Failed to delete data into sqlite table", error)
+    finally:
+        if (connection):
+            connection.close()
+            print("The SQLite connection is closed")
+    
+    return redirect(url_for('player_info', playerId=playerId))
 
 if __name__ == '__main__':
     app.run(debug=True)

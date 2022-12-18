@@ -88,7 +88,7 @@
 
     <div id="dropdown-container">
         <p>Select a player: </p>
-        <select onchange="this.options[this.selectedIndex].value && (window.location.href = '/player/' + this.options[this.selectedIndex].value)" style="width: 400px;" id="dropdown" placeholder="Select a Player">
+        <select onchange="this.options[this.selectedIndex].value && (window.location.href = '/player/' + this.options[this.selectedIndex].value)" style="width: 400px;" id="dropdownPlayers" placeholder="Select a Player">
             <option value="">Select a Player</option>
             {% for player in players %}
             <option value="{{ player[0] }}">{{ player[1] }} {{ player[2] }}</option>
@@ -105,7 +105,7 @@
             <h2>Personal Info:</h2>
             <p>Player Name: <span id="player-name">{{player[3]}} {{player[4]}}</span></p>
             <p>Player Number: <span id="player-number"></span></p>
-            <p>Player Position: <span id="player-position"></span></p>
+            <p>Player Position: <span id="player-position">{{player[18]}}</span></p>
             <p>Player Height: <span id="player-height">{{player[8]}}</span></p>
             <p>Player Weight: <span id="player-weight">{{player[9]}}</span></p>
             <p>Player Birthdate: <span id="player-birthdate">{{player[21]}}/{{player[20]}}/{{player[19]}}</span></p>
@@ -129,20 +129,28 @@
                         Award
                     </th>
 
+                    <th>
+
+                    </th>
+
                 </tr>
 
                 {% for award in awards %}
 
                 <tr>
                     <td>
+                        {{ award[1] }}
+                    </td>
+                    <td>
                         {{ award[2] }}
                     </td>
+
                     <td>
                         {{ award[3] }}
                     </td>
 
                     <td>
-                        {{ award[1] }}
+                        <a href="./{{ player[0] }}/deleteaward?awardsPlayersId={{ award[0] }}">Delete</a>
                     </td>
 
                 </tr>
@@ -195,6 +203,7 @@
                     <td>
                         <input type="text" name="awardName" id="addAwardName" class="insert-table-input">
                     </td>
+
                 </tr>
             </table>
             <input id="submitAddAwardButton" style="display:none;" type="submit" value="submit" />
@@ -224,7 +233,13 @@
                         Position
                     </th>
                     <th>
-                        Points
+                        Goals
+                    </th>
+                    <th>
+                        Assists
+                    </th>
+                    <th>
+                        Total Points
                     </th>
 
                     <th>
@@ -239,6 +254,9 @@
                         {{ scoring[1] }}
                     </td>
                     <td>
+                        {{ scoring[8] }}
+                    </td>
+                    <td>
                         {{ scoring[3] }}
                     </td>
                     <td>
@@ -247,12 +265,17 @@
                     <td>
                         {{ scoring[5] }}
                     </td>
+
                     <td>
-                        {{ scoring[9] }}
+                        {{ scoring[6] }}
                     </td>
 
                     <td>
-                        <a href="./{{ player[0] }}/deletescoring?year={{ scoring[1] }}&team={{ scoring[3] }}&league={{ scoring[4] }}&position={{ scoring[5] }}&points={{ scoring[9] }}">Delete</a>
+                        {{ scoring[7] }}
+                    </td>
+
+                    <td>
+                        <a href="./{{ player[0] }}/deletescoring?scoringId={{ scoring[0] }}">Delete</a>
                     </td>
                     
                 </tr>
@@ -265,7 +288,11 @@
                     </td>
 
                     <td>
-                        <input type="text" name="ScoringTeam" id="addScoringTeam" class="insert-table-input">
+                        <select name="ScoringTeam" id="addScoringTeam">
+                            {% for team in teams %}
+                            <option value="{{ team[0] }}">{{ team[1] }} ({{team[2]}})</option>
+                            {% endfor %}
+                        </select>
                     </td>
                     <td>
                         <input type="text" name="ScoringLeague" id="addScoringLeague" class="insert-table-input">
@@ -273,6 +300,14 @@
 
                     <td>
                         <input type="text" name="ScoringPosition" id="addScoringPosition" class="insert-table-input">
+                    </td>
+
+                    <td>
+                        <input type="text" name="ScoringGoals" id="addScoringGoals" class="insert-table-input">
+                    </td>
+
+                    <td>
+                        <input type="text" name="ScoringAssists" id="addScoringAssists" class="insert-table-input">
                     </td>
 
                     <td>

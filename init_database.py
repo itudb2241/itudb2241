@@ -22,6 +22,7 @@ create_tables_commands = [
         )""",
     """
         CREATE TABLE IF NOT EXISTS AwardsPlayers (
+            awardsPlayersId INTEGER PRIMARY KEY AUTOINCREMENT,
             PlayerId TEXT REFERENCES Master (playerID),
             Award TEXT,
             Year INTEGER,
@@ -158,6 +159,7 @@ create_tables_commands = [
     """,
     """
         CREATE TABLE IF NOT EXISTS Scoring (
+            scoringId INTEGER PRIMARY KEY AUTOINCREMENT,
             PlayerId TEXT REFERENCES Master (playerID),
             Year INTEGER,
             Stint INTEGER,
