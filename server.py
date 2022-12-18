@@ -58,7 +58,24 @@ def games():
     connection.close()
 
     return render_template('games.html', games=games)
+@app.route('/coaches')
+def coaches():
+    connection = sqlite3.connect('database.db')
+    cursor = connection.cursor()
+    coaches = cursor.execute('SELECT CoachId, NameGiven FROM Master WHERE CoachId NOT NULL ORDER BY NameGiven').fetchall()
+    connection.close()
 
+    return render_template('coaches.html', coaches=coaches,)    
+@app.route('/coach/<coachId>')
+def coaches_info(coachId):
+    connection = sqlite3.connect('database.db')
+    cursor = connection.cursor()
+    coaches = cursor.execute('SELECT CoachId, NameGiven FROM Master WHERE CoachId NOT NULL ORDER BY NameGiven').fetchall()
+    coach = cursor.execute('SELECT * FROM Master WHERE coachId = ?', (coachId,)).fetchone()
+    awards = cursor.execute('SELECT coachId, Year, award, lgId FROM AwardsCoaches WHERE coachId = ?', (coachId,)).fetchall()
+    connection.close()
+
+    return render_template('coaches.html', coaches=coaches, coach=coach, awards=awards)
 @app.route('/player/<playerId>')
 def player_info(playerId):
 
