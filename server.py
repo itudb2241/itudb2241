@@ -166,6 +166,37 @@ def add_goalie(playerId):
     
     return redirect(url_for('player_info', playerId=playerId))
 
+@app.route("/player/<playerId>/editgoalie", methods=['POST'])
+def edit_goalie(playerId):
+
+    args = request.args
+    # if not args: return redirect(url_for('player_info', playerId=playerId))
+    GoalieYear = request.form['GoalieYear']
+    GoalieTeam = request.form['GoalieTeam']
+    GoalieLeague = request.form['GoalieLeague']
+    GoalieMinutes = request.form['GoalieMinutes']
+    GoalieWins  = request.form['GoalieWins']
+    GoalieLosses = request.form['GoalieLosses']
+    GoalieTies = request.form['GoalieTies']
+    GoalieStint = request.form['GoalieStint']
+
+    try:
+        connection = sqlite3.connect('database.db')
+        cursor = connection.cursor()
+        cursor.execute('UPDATE Goalies SET year = ?, tmId = ?, lgId = ?, Min = ?, W = ?, L = ?, TOL = ?, Stint = ? WHERE GoaliesId = ?', (GoalieYear, GoalieTeam, GoalieLeague, GoalieMinutes, GoalieWins, GoalieLosses, GoalieTies, GoalieStint, args['GoaliesId']))
+        print("GoaliesId: " + args['GoaliesId'])
+        # print(cursor.rowcount)
+        connection.commit()
+        cursor.close()
+    except sqlite3.Error as error:
+        print("Failed to update data into sqlite table", error)
+    finally:
+        if (connection):
+            connection.close()
+            print("The SQLite connection is closed")
+    
+    return redirect(url_for('player_info', playerId=playerId))
+
 @app.route("/player/<playerId>/addshootout", methods=['POST'])
 def add_shootout(playerId):
     ShootoutYear = request.form['ShootoutYear']

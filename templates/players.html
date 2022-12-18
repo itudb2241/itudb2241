@@ -83,6 +83,18 @@
             document.getElementById("addScoringButton").style.display = null;
             document.getElementById("cancelAddScoringButton").style.display = "none";
         }
+        function enableeditGoalie() {
+            document.getElementById("editGoalieForm").style.display = null;
+            document.getElementById("submitEditGoalieButton").style.display = null;
+            document.getElementById("editGoalieButton").style.display = "none";
+            document.getElementById("cancelEditGoalieButton").style.display = null;
+        }
+        function canceleditGoalie() {
+            document.getElementById("editGoalieForm").style.display = "none";
+            document.getElementById("submitEditGoalieButton").style.display = "none";
+            document.getElementById("editGoalieButton").style.display = null;
+            document.getElementById("cancelEditGoalieButton").style.display = "none";
+        }
     </script>
 
 
@@ -457,8 +469,57 @@
                             </td>
                             <td>
                                 <a href="./{{ player[0] }}/deletegoalie?GoaliesId={{ goal[0] }}">Delete</a>
+                                <button id="editgoalieButton" style="display: block;" onclick="enableeditGoalie()">Edit Rows</button>
                             </td>
-        
+
+                        </tr>
+                        <tr id="editGoalieForm" style="display:none">
+                            <form action="./{{ player[0] }}/editgoalie?GoaliesId={{ goal[0] }}" method="POST"> 
+                            <td>
+                                <input type="number" name="GoalieYear" id="editGoalieYear" class="insert-table-input" value="{{ goal[2] }}">
+                            </td>
+                            <td>
+                                <select name="GoalieTeam" id="editGoalieTeam">
+                                    {% for team in teams %}
+                                    <option value="{{ team[0] }}">{{ team[1] }} ({{team[2]}})</option>
+                                    {% endfor %}
+                                </select>
+                            </td>
+                            <td>
+                                <select name="GoalieLeague" id="editGoalieLeague">
+                                    <option value="NHL">NHL</option>
+                                    <option value="AHL">AHL</option>
+                                    <option value="WHL">WHL</option>
+                                    <option value="OHL">OHL</option>
+                                    <option value="QMJHL">QMJHL</option>
+                                    <option value="NCAA">NCAA</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </td>
+                            <td>
+                                <input type="text" name="GoalieMinutes" id="editGoalieMinutes" class="insert-table-input" value="{{ goal[7] }}">
+                            </td>
+                            <td>
+                                <input type="text" name="GoalieWins" id="editGoalieWins" class="insert-table-input" value="{{ goal[8] }}">
+                            </td>
+                            <td>
+                                <input type="text" name="GoalieLosses" id="editGoalieLosses" class="insert-table-input" value="{{ goal[9] }}">
+                            </td>
+                            <td>
+                                <input type="text" name="GoalieTies" id="editGoalieTies" class="insert-table-input" value="{{ goal[10] }}">
+                            </td>
+                            <td>
+                                <input type="text" name="GoalieStint" id="editGoalieStint" class="insert-table-input" value="{{ goal[13] }}">
+                            </td>
+                            <td>
+                                <button id="submitEditGoalieButton" style="display:none;" type="submit">Submit</button>
+                            </td>
+                            <td>
+                                <button id="cancelEditGoalieButton" style="display:none;" onclick="cancelEditGoalie()">Cancel</button>
+                            </td>
+                            </form>
+
+                        </tr>
                         {% endfor %}
                         <form action="./{{ player[0] }}/addgoalie" method="POST">
                         <tr id="addGoalieFormRow" style="display:none;">
@@ -596,6 +657,7 @@
                         </td>
                         <td>
                             <a href="./{{ player[0] }}/deleteshootout?ShootoutId={{ shootout[8] }}">Delete</a>
+                            
                         </td>
     
                     {% endfor %}
