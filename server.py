@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, url_for, redirect
 import sqlite3
+import re
 
 app = Flask(__name__)
 
@@ -11,15 +12,6 @@ app.config.update(
 @app.route('/')
 def hello_world():
     return render_template('index.html')
-
-@app.route('/players')
-def players():
-    connection = sqlite3.connect('database.db')
-    cursor = connection.cursor()
-    players = cursor.execute('SELECT playerId, firstName, lastName FROM Master WHERE playerId NOT NULL').fetchall()
-    connection.close()
-
-    return render_template('players.html', players=players)
 
 @app.route('/addplayer')
 def addplayer():
@@ -50,6 +42,15 @@ def addplayer1():
 
     return render_template('addplayer.html')
 
+@app.route('/players')
+def players():
+    connection = sqlite3.connect('database.db')
+    cursor = connection.cursor()
+    players = cursor.execute('SELECT playerId, firstName, lastName FROM Master WHERE playerId NOT NULL').fetchall()
+    connection.close()
+
+    return render_template('players.html', players=players)
+
 @app.route('/player/<playerId>')
 def player_info(playerId):
 
@@ -63,6 +64,33 @@ def player_info(playerId):
     print(awards)
 
     return render_template('players.html', player=player, players= players,awards=awards if awards is not None and len(awards) > 0 else None, goalies=goalies if goalies is not None and len(goalies) > 0 else None, scorings=scorings if scorings is not None and len(scorings) > 0 else None)
+
+
+@app.route('/teams')
+def team_page():
+
+    connection = sqlite3.connect('database.db')
+    cursor = connection.cursor()
+    teams = cursor.execute('SELECT tmId, name FROM Teams WHERE tmId NOT NULL').fetchall()
+
+    return render_template('teams.html', teams=teams)
+
+
+@app.route('/teams/<tmId>')
+def team_info(tmId):
+
+    connection = sqlite3.connect('database.db')
+    cursor = connection.cursor()
+    teams = cursor.execute('SELECT tmId, name FROM Teams WHERE tmId NOT NULL').fetchall()
+    team = cursor.execute('SELECT * FROM Teams WHERE tmId = ?', (tmId,)).fetchone()
+    coach_id = cursor.execute("SELECT CoachId FROM Coaches WHERE tmId = ?",(tmId,)).fetchall()
+    
+    coach_id[0] = re.sub('[^A-Za-z0-9]+', '', str(coach_id[0]))
+    coach_name = cursor.execute("SELECT NameGiven FROM Master WHERE CoachId = ?",(str(coach_id[0]),)).fetchall()
+    coach_name = re.sub('[^A-Za-z0-9]+', ' ', str(coach_name))
+    return render_template('teams.html', team=team, teams= teams,coach_id=coach_id, coach_name=coach_name)
+
+
 
 
 @app.route("/player/<playerId>/addscoring", methods=['POST'])
