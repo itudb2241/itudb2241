@@ -92,7 +92,7 @@ create_tables_commands = [
         CREATE TABLE IF NOT EXISTS GoaliesSC (
             PlayerId TEXT REFERENCES Master (playerID),
             Year INTEGER,
-            TmId INTEGER REFERENCES Teams (TmId),
+            TmId TEXT REFERENCES Teams (TmId),
             LgId TEXT,
             GP INTEGER,
             Min INTEGER,

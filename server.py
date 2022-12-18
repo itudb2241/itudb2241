@@ -51,13 +51,13 @@ def players():
 
     return render_template('players.html', players=players)
 @app.route('/games')
-def games():
+def years():
     connection = sqlite3.connect('database.db')
     cursor = connection.cursor()
-    games = cursor.execute('SELECT LgId,TmId FROM Teams').fetchall()
+    years = cursor.execute('SELECT DISTINCT Year FROM GoaliesSC').fetchall()
     connection.close()
+    return render_template('games.html', years=years)
 
-    return render_template('games.html', games=games)
 @app.route('/coaches')
 def coaches():
     connection = sqlite3.connect('database.db')
@@ -76,6 +76,14 @@ def coaches_info(coachId):
     connection.close()
 
     return render_template('coaches.html', coaches=coaches, coach=coach, awards=awards)
+
+#@app.route('/years/<Year>')
+# def teaminfo(Year):
+#    connection= sqlite3.connect('database.db')
+#    cursor=connection.cursor()
+#   nteams=cursor.execute('SELECT Name')
+#    connection.close
+#    return render_template('games.html',nteams=nteams)
 @app.route('/player/<playerId>')
 def player_info(playerId):
 

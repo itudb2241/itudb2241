@@ -28,16 +28,16 @@
             <h1>Games information:</h1>
     
         <div id="dropdown-container">
-            <p>Select a game: </p>
-            <select onchange="this.options[this.selectedIndex].value && (window.location.href = '/games/' + this.options[this.selectedIndex].value)" style="width: 400px;" id="dropdown" placeholder="Select a Game">
-                <option value="">Select a league</option>
-                {% for game in games %}
-                <option value="{{game[0]}}">{{ game[1] }}</option>
+            <p>Select a Year: </p>
+            <select onchange="this.options[this.selectedIndex].value && (window.location.href = '/years/' + this.options[this.selectedIndex].value)" style="width: 400px;" id="dropdown" placeholder="Select a Year">
+                <option value="">Select a Year</option>
+                {% for year in years %}
+                <option value="{{year[0]}}">{{ year[0] }}</option>
                 {% endfor %}
             </select>
         </div>
     
-        {% if game %}
+        {% if team %}
     
             <div class="row">
                 <div class="col">
@@ -52,15 +52,15 @@
             {% endif %}
     
         </div>
-    <div id="Teams-in-the-league">
-        <h2>Teams in the League</h2>
+    <div id="Teams">
+        <h2>Nostalgia Teams</h2>
         <table>
             <tr>
                 <th>
                     Team
                 </th>
                 <th>
-                    Game
+                    Minutes
                 </th>
                 <th>
                     Win
@@ -68,6 +68,26 @@
                 <th>
                     Lose
                 </th>
+                <th>
+                    Ties
+                </th>
+            </tr>
+            <tr>
+                <td>
+
+                </td>
+                <td>
+
+                </td>
+                <td>
+
+                </td>
+                <td>
+
+                </td>
+                <td>
+
+                </td>
             </tr>
         </table>
     </div>        
