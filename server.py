@@ -67,7 +67,7 @@ def player_info(playerId):
     players = cursor.execute('SELECT playerId, firstName, lastName FROM Master WHERE playerId NOT NULL ORDER BY FirstName').fetchall()
     player = cursor.execute('SELECT * FROM Master WHERE playerId = ?', (playerId,)).fetchone()
     awards = cursor.execute('SELECT awardsPlayersId, Year, LgId, Award FROM AwardsPlayers WHERE playerId = ?', (playerId,)).fetchall()
-    scorings = cursor.execute('SELECT u.scoringId, u.year, u.TmId, u.LgId, u.Pos,u.G, u.A, u.Pts, p.Name FROM (SELECT scoringId, year, tmId, LgId, Pos, Pts, G, A FROM Scoring WHERE playerId = ?) u LEFT JOIN (SELECT year,TmId,LgId, Name FROM Teams) p ON u.TmId = p.TmId AND u.year = p.year WHERE TmId NOT NULL', (playerId,)).fetchall()
+    scorings = cursor.execute('SELECT u.scoringId, u.year, u.TmId, u.LgId, u.Pos,u.G, u.A, u.Pts, p.Name FROM (SELECT scoringId, year, tmId, LgId, Pos, Pts, G, A FROM Scoring WHERE playerId = ?) u LEFT JOIN (SELECT year,TmId,LgId, Name FROM Teams) p ON u.TmId = p.TmId AND u.year = p.year WHERE p.TmId NOT NULL', (playerId,)).fetchall()
     goalies = cursor.execute('SELECT * FROM Goalies WHERE playerId = ?', (playerId,)).fetchall()
     shootouts = cursor.execute('SELECT * FROM GoaliesShootout WHERE playerId = ?', (playerId,)).fetchall()
     teams = cursor.execute('Select DISTINCT TmId, Name, LgId from Teams').fetchall() 
