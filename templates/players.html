@@ -394,7 +394,7 @@
 
 
     <div id="goalies">
-            <h2>Goals Saved:</h2>
+            <h2>Goaltending Statistics:</h2>
             {% if goalies %}
             <table>
                 <tr>
@@ -410,22 +410,37 @@
                     <th>
                         Minute
                     </th>
+                    <th>
+                        Wins / Losses / Ties
+                    </th>
+                    <th>
+                        Stint
+                    </th>
                 </tr>
 
                 {% for goal in goalies %}
 
                 <tr>
                     <td>
-                        {{ goal[1] }}
+                        {{ goal[2] }}
                     </td>
                     <td>
-                        {{ goal[3] }}
+                        {{ goalies_team[0] }}
                     </td>
                     <td>
-                        {{ goal[4] }}
+                        {{ goal[5] }}
                     </td>
                     <td>
-                        {{ goal[6] }}
+                        {{ goal[7] }}
+                    </td>
+                    <td>
+                        {{ goal[7] }} / {{ goal[9] }} / {{ goal[10] }}
+                    </td>
+                    <td>
+                        {{ goal[13] }}
+                    </td>
+                    <td>
+                        <a href="./{{ player[0] }}/deletegoalie?goalieId={{ goal[0] }}">Delete</a>
                     </td>
 
                 {% endfor %}
@@ -434,9 +449,12 @@
                     <td>
                         <input type="number" name="GoalieYear" id="addGoalieYear" class="insert-table-input">
                     </td>
-
                     <td>
-                        <input type="text" name="GoalieTeam" id="addGoalieTeam" class="insert-table-input">
+                        <select name="GoalieTeam" id="addGoalieTeam">
+                            {% for team in teams %}
+                            <option value="{{ team[0] }}">{{ team[1] }} ({{team[2]}})</option>
+                            {% endfor %}
+                        </select>
                     </td>
                     <td>
                         <input type="text" name="GoalieLeague" id="addGoalieLeague" class="insert-table-input">
@@ -445,6 +463,10 @@
                     <td>
                         <input type="text" name="GoaliePoints" id="addGoaliePoints" class="insert-table-input">
                     </td>
+                    <td>
+                        <input type="text" name="GoalieWins" id="addGoalieWins/Lose/Ties" class="insert-table-input">
+                    </td>
+
                 </tr>
             </table>
             <input id="submitAddGoalieButton" style="display:none;" type="submit" value="submit">

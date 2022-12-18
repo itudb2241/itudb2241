@@ -50,6 +50,14 @@ def players():
     connection.close()
 
     return render_template('players.html', players=players)
+@app.route('/games')
+def games():
+    connection = sqlite3.connect('database.db')
+    cursor = connection.cursor()
+    games = cursor.execute('SELECT playerId, lgId FROM Goalies WHERE playerId NOT NULL').fetchall()
+    connection.close()
+
+    return render_template('games.html', games=games)
 
 @app.route('/player/<playerId>')
 def player_info(playerId):
@@ -58,11 +66,20 @@ def player_info(playerId):
     cursor = connection.cursor()
     players = cursor.execute('SELECT playerId, firstName, lastName FROM Master WHERE playerId NOT NULL ORDER BY FirstName').fetchall()
     player = cursor.execute('SELECT * FROM Master WHERE playerId = ?', (playerId,)).fetchone()
-    awards = cursor.execute('SELECT awardsPlayersId, Year, LgId, Award FROM AwardsPlayers WHERE playerId = ? ORDER BY Year', (playerId,)).fetchall()
-    scorings = cursor.execute('SELECT u.scoringId, u.year, u.TmId, u.LgId, u.Pos,u.G, u.A, u.Pts, p.Name FROM (SELECT scoringId, year, tmId, LgId, Pos, Pts, G, A FROM Scoring WHERE playerId = ?) u LEFT JOIN (SELECT year,TmId,LgId, Name FROM Teams) p ON u.TmId = p.TmId AND u.year = p.year WHERE p.name NOT NULL ORDER BY u.Year', (playerId,)).fetchall()
-    goalies = cursor.execute('SELECT * FROM Goalies WHERE playerId = ? ORDER BY Year', (playerId,)).fetchall()
-    teams = cursor.execute('Select DISTINCT TmId, Name, LgId from Teams ORDER BY Name').fetchall() 
-    return render_template('players.html', player=player, players= players,awards=awards if awards is not None and len(awards) > 0 else None, goalies=goalies if goalies is not None and len(goalies) > 0 else None, scorings=scorings if scorings is not None and len(scorings) > 0 else None, teams=teams if teams is not None and len(teams) > 0 else None)
+    awards = cursor.execute('SELECT awardsPlayersId, Year, LgId, Award FROM AwardsPlayers WHERE playerId = ?', (playerId,)).fetchall()
+    scorings = cursor.execute('SELECT u.scoringId, u.year, u.TmId, u.LgId, u.Pos,u.G, u.A, u.Pts, p.Name FROM (SELECT scoringId, year, tmId, LgId, Pos, Pts, G, A FROM Scoring WHERE playerId = ?) u LEFT JOIN (SELECT year,TmId,LgId, Name FROM Teams) p ON u.TmId = p.TmId AND u.year = p.year', (playerId,)).fetchall()
+    goalies = cursor.execute('SELECT * FROM Goalies WHERE playerId = ?', (playerId,)).fetchall()
+    teams = cursor.execute('Select DISTINCT TmId, Name, LgId from Teams').fetchall() 
+    print(scorings)
+    try:
+        goaliesteam = goalies[0][4]
+        if(goaliesteam != None):
+            goalies_team = cursor.execute('SELECT Name FROM Teams WHERE TmId = ?', (str(goalies[0][4]),)).fetchone()
+    except:
+        goaliesteam = None
+        goalies_team = None
+
+    return render_template('players.html', player=player, players= players,awards=awards if awards is not None and len(awards) > 0 else None, goalies=goalies if goalies is not None and len(goalies) > 0 else None, scorings=scorings if scorings is not None and len(scorings) > 0 else None, teams=teams if teams is not None and len(teams) > 0 else None, goalies_team=goalies_team if goalies_team is not None and len(goalies_team) > 0 else None)
 
 
 @app.route('/teams')
@@ -90,7 +107,31 @@ def team_info(tmId):
     return render_template('teams.html', team=team, teams= teams,coach_id=coach_id, coach_name=coach_name)
 
 
+@app.route("/player/<playerId>/addgoalie", methods=['POST'])
+def add_goalie(playerId):
+    GoalieYear = request.form['GoalieYear']
+    GoalieTeam = request.form['GoalieTeam']
+    GoalieLeague = request.form['GoalieLeague']
+    GoaliePoints = request.form['GoaliePoints']
+    GoalieWinsLoseTie  = request.form['GoalieWinsLoseTie']
+    GoalieWinsLoseTie = GoalieWinsLoseTie.split('/')
+    GoalieStint = int(GoalieWinsLoseTie[0]) + int(GoalieWinsLoseTie[1]) + int(GoalieWinsLoseTie[2])
 
+    try:
+        connection = sqlite3.connect('database.db')
+        cursor = connection.cursor()
+        cursor.execute('INSERT INTO Goalies (playerId, year, tmId, lgId, Min, W, L , TOL) VALUES (?, ?, ?, ?, ?, ?, ?, ?)', (playerId, GoalieYear, GoalieTeam, GoalieLeague, GoaliePoints, GoalieWinsLoseTie[0], GoalieWinsLoseTie[1], GoalieWinsLoseTie[2], GoalieStint))
+        print(cursor.rowcount)
+        connection.commit()
+        cursor.close()
+    except sqlite3.Error as error:
+        print("Failed to insert data into sqlite table", error)
+    finally:
+        if (connection):
+            connection.close()
+            print("The SQLite connection is closed")
+    
+    return redirect(url_for('player_info', playerId=playerId))
 
 @app.route("/player/<playerId>/addscoring", methods=['POST'])
 def add_scoring(playerId):
@@ -105,7 +146,7 @@ def add_scoring(playerId):
     try:
         connection = sqlite3.connect('database.db')
         cursor = connection.cursor()
-        cursor.execute('INSERT INTO Scoring (playerId, year, tmId, lgId, pos,G,A, Pts) VALUES (?, ?, ?, ?, ?, ?, ?, ?)', (playerId, ScoringYear, ScoringTeam, ScoringLeague, ScoringPosition,ScoringGoals,ScoringAssists, ScoringPoints))
+        cursor.execute('INSERT INTO Scoring (playerId, year, tmId, lgId, pos, Pts) VALUES (?, ?, ?, ?, ?, ?)', (playerId, ScoringYear, ScoringTeam, ScoringLeague, ScoringPosition, ScoringPoints))
         print(cursor.rowcount)
         connection.commit()
         cursor.close()
@@ -118,29 +159,7 @@ def add_scoring(playerId):
     
     return redirect(url_for('player_info', playerId=playerId))
 
-@app.route("/player/<playerId>/addgoalie", methods=['POST'])
-def add_goalie(playerId):
-    GoalieYear = request.form['GoalieYear']
-    GoalieTeam = request.form['GoalieTeam']
-    GoalieLeague = request.form['GoalieLeague']
-    GoaliePoints = request.form['GoaliePoints']
 
-    try:
-        connection = sqlite3.connect('database.db')
-        cursor = connection.cursor()
-        cursor.execute('INSERT INTO Goalies (playerId, year, tmId, lgId, Min) VALUES (?, ?, ?, ?, ?)', (playerId, GoalieYear, GoalieTeam, GoalieLeague, GoaliePoints))
-        print(cursor.rowcount)
-        connection.commit()
-        
-        cursor.close()
-    except sqlite3.Error as error:
-        print("Failed to insert data into sqlite table", error)
-    finally:
-        if (connection):
-            connection.close()
-            print("The SQLite connection is closed")
-    
-    return redirect(url_for('player_info', playerId=playerId))
 
 @app.route("/player/<playerId>/addaward", methods=['POST'])
 def add_award(playerId):
@@ -188,6 +207,29 @@ def delete_scoring(playerId):
     
     return redirect(url_for('player_info', playerId=playerId))
 
+@app.route("/player/<playerId>/deletegoalie", methods=['GET'])
+def delete_goalie(playerId):
+    
+        args = request.args
+    
+        if not args: return redirect(url_for('player_info', playerId=playerId))
+    
+        try:
+            connection = sqlite3.connect('database.db')
+            cursor = connection.cursor()
+            cursor.execute('DELETE FROM Goalies WHERE goalieId = ?', (args['goalieId'],))
+            connection.commit()
+            
+            cursor.close()
+        except sqlite3.Error as error:
+            print("Failed to delete data into sqlite table", error)
+        finally:
+            if (connection):
+                connection.close()
+                print("The SQLite connection is closed")
+        
+        return redirect(url_for('player_info', playerId=playerId))
+
 @app.route("/player/<playerId>/deleteaward", methods=['GET'])
 def delete_award(playerId):
 
@@ -208,82 +250,6 @@ def delete_award(playerId):
         if (connection):
             connection.close()
             print("The SQLite connection is closed")
-    
-    return redirect(url_for('player_info', playerId=playerId))
-
-@app.route("/player/<playerId>/updatescoring", methods=['GET'])
-def edit_scoring(playerId):
-
-    args = request.args
-
-    if not args: return redirect(url_for('player_info', playerId=playerId))
-
-    if(args["type"] == "increment"):
-        if(args["column"] == "G"):
-            try:
-                connection = sqlite3.connect('database.db')
-                cursor = connection.cursor()
-                cursor.execute('UPDATE Scoring SET G = G + 1 WHERE scoringId = ?', (args['scoringId'],))
-                cursor.execute('UPDATE Scoring SET Pts = Pts + 1 WHERE scoringId = ?', (args['scoringId'],))
-                connection.commit()
-                
-                cursor.close()
-            except sqlite3.Error as error:
-                print("Failed to update data into sqlite table", error)
-            finally:
-                if (connection):
-                    connection.close()
-                    print("The SQLite connection is closed")
-        
-        elif(args["column"] == "A"):
-            try:
-                connection = sqlite3.connect('database.db')
-                cursor = connection.cursor()
-                cursor.execute('UPDATE Scoring SET A = A + 1 WHERE scoringId = ?', (args['scoringId'],))
-                cursor.execute('UPDATE Scoring SET Pts = Pts + 1 WHERE scoringId = ?', (args['scoringId'],))
-                connection.commit()
-                
-                cursor.close()
-            except sqlite3.Error as error:
-                print("Failed to update data into sqlite table", error)
-            finally:
-                if (connection):
-                    connection.close()
-                    print("The SQLite connection is closed")
-    elif (args["type"] == "decrement"):
-
-        if(args["column"] == "G"):
-            try:
-                connection = sqlite3.connect('database.db')
-                cursor = connection.cursor()
-                cursor.execute('UPDATE Scoring SET G = G - 1 WHERE scoringId = ?', (args['scoringId'],))
-                cursor.execute('UPDATE Scoring SET Pts = Pts - 1 WHERE scoringId = ?', (args['scoringId'],))
-                connection.commit()
-                
-                cursor.close()
-            except sqlite3.Error as error:
-                print("Failed to update data into sqlite table", error)
-            finally:
-                if (connection):
-                    connection.close()
-                    print("The SQLite connection is closed")
-        
-        elif(args["column"] == "A"):
-            try:
-                connection = sqlite3.connect('database.db')
-                cursor = connection.cursor()
-                cursor.execute('UPDATE Scoring SET A = A - 1 WHERE scoringId = ?', (args['scoringId'],))
-                cursor.execute('UPDATE Scoring SET Pts = Pts - 1 WHERE scoringId = ?', (args['scoringId'],))
-                connection.commit()
-                
-                cursor.close()
-            except sqlite3.Error as error:
-                print("Failed to update data into sqlite table", error)
-            finally:
-                if (connection):
-                    connection.close()
-                    print("The SQLite connection is closed")
-    
     
     return redirect(url_for('player_info', playerId=playerId))
 
