@@ -82,7 +82,7 @@ def player_info(playerId):
     try:
         shootouteam = shootouts[0][4]
         if(shootouteam != None):
-            shootouts_team = cursor.execute('SELECT Name FROM Teams WHERE TmId = ?', (str(shootouts[0][4]),)).fetchone()
+            shootouts_team = cursor.execute('SELECT Name FROM Teams WHERE TmId = ?', (str(shootouts[0][3]),)).fetchone()
     except:
         shootouteam = None
         shootouts_team = None
@@ -120,7 +120,7 @@ def add_goalie(playerId):
     GoalieYear = request.form['GoalieYear']
     GoalieTeam = request.form['GoalieTeam']
     GoalieLeague = request.form['GoalieLeague']
-    GoaliePoints = request.form['GoaliePoints']
+    GoalieMinutes = request.form['GoalieMinutes']
     GoalieWinsLoseTie  = request.form['GoalieWinsLoseTie']
     GoalieWinsLoseTie = GoalieWinsLoseTie.split('/')
     GoalieStint = int(GoalieWinsLoseTie[0]) + int(GoalieWinsLoseTie[1]) + int(GoalieWinsLoseTie[2])
@@ -128,7 +128,7 @@ def add_goalie(playerId):
     try:
         connection = sqlite3.connect('database.db')
         cursor = connection.cursor()
-        cursor.execute('INSERT INTO Goalies (playerId, year, tmId, lgId, Min, W, L , TOL) VALUES (?, ?, ?, ?, ?, ?, ?, ?)', (playerId, GoalieYear, GoalieTeam, GoalieLeague, GoaliePoints, GoalieWinsLoseTie[0], GoalieWinsLoseTie[1], GoalieWinsLoseTie[2], GoalieStint))
+        cursor.execute('INSERT INTO Goalies (playerId, year, tmId, lgId, Min, W, L , TOL, Stint) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)', (playerId, GoalieYear, GoalieTeam, GoalieLeague, GoalieMinutes, GoalieWinsLoseTie[0], GoalieWinsLoseTie[1], GoalieWinsLoseTie[2], GoalieStint))
         print(cursor.rowcount)
         connection.commit()
         cursor.close()
@@ -154,7 +154,7 @@ def add_shootout(playerId):
     try:
         connection = sqlite3.connect('database.db')
         cursor = connection.cursor()
-        cursor.execute('INSERT INTO Shootouts (playerId, year, tmId, W, L, SA, GA, Stint) VALUES (?, ?, ?, ?, ?, ?, ?, ?)', (playerId, ShootoutYear, ShootoutTeam, ShootoutWinsLose[0], ShootoutWinsLose[1], ShootoutAgainst, GoalsoutAgainst, ShootoutStint))
+        cursor.execute('INSERT INTO GoaliesShootout (playerId, year, tmId, W, L, SA, GA, Stint) VALUES (?, ?, ?, ?, ?, ?, ?, ?)', (playerId, ShootoutYear, ShootoutTeam, ShootoutWinsLose[0], ShootoutWinsLose[1], ShootoutAgainst, GoalsoutAgainst, ShootoutStint))
         print(cursor.rowcount)
         connection.commit()
         cursor.close()
@@ -252,7 +252,7 @@ def delete_goalie(playerId):
         try:
             connection = sqlite3.connect('database.db')
             cursor = connection.cursor()
-            cursor.execute('DELETE FROM Goalies WHERE goalieId = ?', (args['goalieId'],))
+            cursor.execute('DELETE FROM Goalies WHERE GoaliesId = ?', (args['GoaliesId'],))
             connection.commit()
             
             cursor.close()
@@ -272,7 +272,7 @@ def delete_shootout(playerId):
         try:
             connection = sqlite3.connect('database.db')
             cursor = connection.cursor()
-            cursor.execute('DELETE FROM Shootouts WHERE ShootoutId = ?', (args['ShootoutId'],))
+            cursor.execute('DELETE FROM GoaliesShootout WHERE ShootoutId = ?', (args['ShootoutId'],))
             connection.commit()
             cursor.close()
         except sqlite3.Error as error:

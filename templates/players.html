@@ -449,13 +449,13 @@
                                 {{ goal[7] }}
                             </td>
                             <td>
-                                {{ goal[7] }} / {{ goal[9] }} / {{ goal[10] }}
+                                {{ goal[8] }} / {{ goal[9] }} / {{ goal[10] }}
                             </td>
                             <td>
                                 {{ goal[13] }}
                             </td>
                             <td>
-                                <a href="./{{ player[0] }}/deletegoalie?goalieId={{ goal[0] }}">Delete</a>
+                                <a href="./{{ player[0] }}/deletegoalie?GoaliesId={{ goal[0] }}">Delete</a>
                             </td>
         
                         {% endfor %}
@@ -476,10 +476,10 @@
                             </td>
         
                             <td>
-                                <input type="text" name="GoaliePoints" id="addGoaliePoints" class="insert-table-input">
+                                <input type="text" name="GoalieMinutes" id="addGoalieMinutes" class="insert-table-input">
                             </td>
                             <td>
-                                <input type="text" name="GoalieWinsLoseTies" id="addGoalieWinsLoseTies" class="insert-table-input">
+                                <input type="text" name="GoalieWinsLoseTie" id="addGoalieWinsLoseTie" class="insert-table-input">
                             </td>
                         </tr>
                     </table>
@@ -530,10 +530,10 @@
                                 </td>
             
                                 <td>
-                                    <input type="text" name="GoaliePoints" id="addGoaliePoints" class="insert-table-input">
+                                    <input type="text" name="GoalieMinutes" id="addGoalieMinutes" class="insert-table-input">
                                 </td>
                                 <td>
-                                    <input type="text" name="GoalieWinsLoseTies" id="addGoalieWinsLoseTies" class="insert-table-input">
+                                    <input type="text" name="GoalieWinsLoseTie" id="addGoalieWinsLoseTie" class="insert-table-input">
                                 </td>
                             </tr>
                     </table>
@@ -546,8 +546,8 @@
                 </div>
               </div>
               <div class="col">
-                <h2>Shootouts</h2>
-                {% if shootout %}
+                <h2>Goaltending Shootouts</h2>
+                {% if shootouts %}
                 <table>
                     <tr>
                         <th>
@@ -556,9 +556,7 @@
                         <th>
                             Team
                         </th>
-                        <th>
-                            Stint
-                        </th>
+
                         <th>
                             Wins/Loses
                         </th>
@@ -567,6 +565,9 @@
                         </th>
                         <th>
                             Goals Against
+                        </th>
+                        <th>
+                            Stint
                         </th>
                     </tr>
     
@@ -577,19 +578,23 @@
                             {{ shootout[1] }}
                         </td>
                         <td>
-                            {{ shootout_team[0] }}
+                            {{ shootouts_team[0] }}
                         </td>
-                        <td>
-                            {{ shootout[3] }}
-                        </td>
-                        <td>
-                            {{ shootout[2] }}
-                        </td>
+
                         <td> 
                             {{ shootout[4] }} / {{ shootout[5] }}
                         </td>
                         <td>
-                            <a href="./{{ player[0] }}/deleteshootout/{{ shootout[8] }}">Delete</a>
+                            {{ shootout[6] }}
+                        </td>
+                        <td>
+                            {{ shootout[7] }}
+                        </td>
+                        <td>
+                            {{ shootout[2] }}
+                        </td>
+                        <td>
+                            <a href="./{{ player[0] }}/deleteshootout?ShootoutId={{ shootout[8] }}">Delete</a>
                         </td>
     
                     {% endfor %}
@@ -599,14 +604,14 @@
                                 <input type="number" name="ShootoutYear" id="addShootoutYear" class="insert-table-input">
                             </td>
                             <td>
-                            <select name="ShouotoutTeam" id="addShootoutTeam">
+                            <select name="ShootoutTeam" id="addShootoutTeam">
                                     {% for team in teams %}
                                     <option value="{{ team[0] }}">{{ team[1] }} ({{team[2]}})</option>
                                     {% endfor %}
                                 </select>
                             </td>
                             <td>
-                                <input type="text" name="ShootoutWinsLoses" id="addShootoutWinsLoses" class="insert-table-input">
+                                <input type="text" name="ShootoutWinsLose" id="addShootoutWinsLose" class="insert-table-input">
                             </td>
         
                             <td>
@@ -622,7 +627,7 @@
                 <input id="submitAddShootoutButton" style="display:none;" type="submit" value="submit">
                 </form>
                 <button id="cancelAddShootoutButton" style="display:none;" onclick="cancelAddShootout()">Cancel</button>
-                <button id="addShootoutButton" style="display: block;" onclick="enableAddShootoute()">Add Shootouts</button>
+                <button id="addShootoutButton" style="display: block;" onclick="enableAddShootout()">Add Shootouts</button>
     
     
                 {% else %}
@@ -636,9 +641,7 @@
                         <th>
                             Team
                         </th>
-                        <th>
-                            Stint
-                        </th>
+
                         <th>
                             Wins/Loses
                         </th>
@@ -647,6 +650,9 @@
                         </th>
                         <th>
                             Goals Against
+                        </th>
+                        <th>
+                            Stint
                         </th>
                     </tr>
                     <form action="./{{ player[0] }}/addshootout" method="POST">
@@ -658,11 +664,9 @@
                         <td>
                             <input type="text" name="ShootoutTeam" id="addShootoutTeam" class="insert-table-input">
                         </td>
+
                         <td>
-                            
-                        </td>
-                        <td>
-                            <input type="text" name="ShootoutWinsLoses" id="addShootoutWinsLoses" class="insert-table-input">
+                            <input type="text" name="ShootoutWinsLose" id="addShootoutWinsLose" class="insert-table-input">
                         </td>
     
                         <td>
@@ -671,10 +675,13 @@
                         <td>
                             <input type="text" name="GoalsAgainst" id="addGoalsAgainst" class="insert-table-input">
                         </td>
+                        <td>
+                            Stint
+                        </td>
                     </tr>
-                </table>
-                <input id="submitAddShootoutButton" style="display:none;" type="submit" value="submit">
-                </form>
+                    </table>
+                    <input id="submitAddShootoutButton" style="display:none;" type="submit" value="submit">
+                    </form>
                 <button id="cancelAddShootoutButton" style="display:none;" onclick="cancelAddShootout()">Cancel</button>
                 <button id="addShootoutButton" style="display: block;" onclick="enableAddShootout()">Add Shootouts</button>
     
@@ -682,7 +689,6 @@
               </div>
             </div>
           </div>
-
 
         {% endif %}
 
