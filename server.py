@@ -69,6 +69,7 @@ def player_info(playerId):
     awards = cursor.execute('SELECT awardsPlayersId, Year, LgId, Award FROM AwardsPlayers WHERE playerId = ?', (playerId,)).fetchall()
     scorings = cursor.execute('SELECT u.scoringId, u.year, u.TmId, u.LgId, u.Pos,u.G, u.A, u.Pts, p.Name FROM (SELECT scoringId, year, tmId, LgId, Pos, Pts, G, A FROM Scoring WHERE playerId = ?) u LEFT JOIN (SELECT year,TmId,LgId, Name FROM Teams) p ON u.TmId = p.TmId AND u.year = p.year', (playerId,)).fetchall()
     goalies = cursor.execute('SELECT * FROM Goalies WHERE playerId = ?', (playerId,)).fetchall()
+    shootouts = cursor.execute('SELECT * FROM GoaliesShootout WHERE playerId = ?', (playerId,)).fetchall()
     teams = cursor.execute('Select DISTINCT TmId, Name, LgId from Teams').fetchall() 
     print(scorings)
     try:
@@ -78,8 +79,15 @@ def player_info(playerId):
     except:
         goaliesteam = None
         goalies_team = None
+    try:
+        shootouteam = shootouts[0][4]
+        if(shootouteam != None):
+            shootouts_team = cursor.execute('SELECT Name FROM Teams WHERE TmId = ?', (str(shootouts[0][4]),)).fetchone()
+    except:
+        shootouteam = None
+        shootouts_team = None
 
-    return render_template('players.html', player=player, players= players,awards=awards if awards is not None and len(awards) > 0 else None, goalies=goalies if goalies is not None and len(goalies) > 0 else None, scorings=scorings if scorings is not None and len(scorings) > 0 else None, teams=teams if teams is not None and len(teams) > 0 else None, goalies_team=goalies_team if goalies_team is not None and len(goalies_team) > 0 else None)
+    return render_template('players.html', player=player, players= players,awards=awards if awards is not None and len(awards) > 0 else None, goalies=goalies if goalies is not None and len(goalies) > 0 else None, scorings=scorings if scorings is not None and len(scorings) > 0 else None, teams=teams if teams is not None and len(teams) > 0 else None, goalies_team=goalies_team if goalies_team is not None and len(goalies_team) > 0 else None, shootouts=shootouts if shootouts is not None and len(shootouts) > 0 else None, shootouts_team=shootouts_team if shootouts_team is not None and len(shootouts_team) > 0 else None)
 
 
 @app.route('/teams')
@@ -132,6 +140,33 @@ def add_goalie(playerId):
             print("The SQLite connection is closed")
     
     return redirect(url_for('player_info', playerId=playerId))
+
+@app.route("/player/<playerId>/addshootout", methods=['POST'])
+def add_shootout(playerId):
+    ShootoutYear = request.form['ShootoutYear']
+    ShootoutTeam = request.form['ShootoutTeam']
+    ShootoutWinsLose   = request.form['ShootoutWinsLose']
+    ShootoutWinsLose = ShootoutWinsLose.split('/')
+    ShootoutAgainst = request.form['ShootsAgainst']
+    GoalsoutAgainst = request.form['GoalsAgainst']
+    ShootoutStint = int(ShootoutWinsLose[0]) + int(ShootoutWinsLose[1])
+
+    try:
+        connection = sqlite3.connect('database.db')
+        cursor = connection.cursor()
+        cursor.execute('INSERT INTO Shootouts (playerId, year, tmId, W, L, SA, GA, Stint) VALUES (?, ?, ?, ?, ?, ?, ?, ?)', (playerId, ShootoutYear, ShootoutTeam, ShootoutWinsLose[0], ShootoutWinsLose[1], ShootoutAgainst, GoalsoutAgainst, ShootoutStint))
+        print(cursor.rowcount)
+        connection.commit()
+        cursor.close()
+    except sqlite3.Error as error:
+        print("Failed to insert data into sqlite table", error)
+    finally:
+        if (connection):
+            connection.close()
+            print("The SQLite connection is closed")
+    
+    return redirect(url_for('player_info', playerId=playerId))
+
 
 @app.route("/player/<playerId>/addscoring", methods=['POST'])
 def add_scoring(playerId):
@@ -228,6 +263,24 @@ def delete_goalie(playerId):
                 connection.close()
                 print("The SQLite connection is closed")
         
+        return redirect(url_for('player_info', playerId=playerId))
+
+@app.route("/player/<playerId>/deleteshootout", methods=['GET'])
+def delete_shootout(playerId):
+        args = request.args
+        if not args: return redirect(url_for('player_info', playerId=playerId))
+        try:
+            connection = sqlite3.connect('database.db')
+            cursor = connection.cursor()
+            cursor.execute('DELETE FROM Shootouts WHERE ShootoutId = ?', (args['ShootoutId'],))
+            connection.commit()
+            cursor.close()
+        except sqlite3.Error as error:
+            print("Failed to delete data into sqlite table", error)
+        finally:
+            if (connection):
+                connection.close()
+                print("The SQLite connection is closed")
         return redirect(url_for('player_info', playerId=playerId))
 
 @app.route("/player/<playerId>/deleteaward", methods=['GET'])

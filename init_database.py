@@ -112,7 +112,8 @@ create_tables_commands = [
             W INTEGER,
             L INTEGER,
             SA INTEGER,
-            GA INTEGER
+            GA INTEGER,
+            ShootoutID INTEGER PRIMARY KEY AUTOINCREMENT
         )
     """,
     """
