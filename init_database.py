@@ -167,9 +167,9 @@ create_tables_commands = [
             LgId TEXT,
             Pos TEXT,
             GP INTEGER,
-            G INTEGER,
-            A INTEGER,
-            Pts INTEGER,
+            G INTEGER CHECK (G >= 0),
+            A INTEGER CHECK (A >= 0),
+            Pts INTEGER CHECK (Pts >= 0),
             PIM INTEGER,
             PlusMinus INTEGER,
             PPG INTEGER,
@@ -389,4 +389,5 @@ for csv_file in csv_files:
     df.to_sql(csv_file[:-4], conn, if_exists='append', index=False)
 
 conn.commit()
+conn.close()
 

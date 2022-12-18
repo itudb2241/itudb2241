@@ -104,7 +104,6 @@
         <div id="player-info">
             <h2>Personal Info:</h2>
             <p>Player Name: <span id="player-name">{{player[3]}} {{player[4]}}</span></p>
-            <p>Player Number: <span id="player-number"></span></p>
             <p>Player Position: <span id="player-position">{{player[18]}}</span></p>
             <p>Player Height: <span id="player-height">{{player[8]}}</span></p>
             <p>Player Weight: <span id="player-weight">{{player[9]}}</span></p>
@@ -264,10 +263,15 @@
                     </td>
                     <td>
                         {{ scoring[5] }}
+                        <a href="./{{player[0]}}/updatescoring?scoringId={{scoring[0]}}&type=increment&column=G">+</a>
+                        <a href="./{{player[0]}}/updatescoring?scoringId={{scoring[0]}}&type=decrement&column=G">-</a>
                     </td>
 
                     <td>
                         {{ scoring[6] }}
+                        <a href="./{{player[0]}}/updatescoring?scoringId={{scoring[0]}}&type=increment&column=A">+</a>
+                        <a href="./{{player[0]}}/updatescoring?scoringId={{scoring[0]}}&type=decrement&column=A">-</a>
+
                     </td>
 
                     <td>

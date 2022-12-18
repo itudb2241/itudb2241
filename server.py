@@ -212,5 +212,81 @@ def delete_award(playerId):
     
     return redirect(url_for('player_info', playerId=playerId))
 
+@app.route("/player/<playerId>/updatescoring", methods=['GET'])
+def edit_scoring(playerId):
+
+    args = request.args
+
+    if not args: return redirect(url_for('player_info', playerId=playerId))
+
+    if(args["type"] == "increment"):
+        if(args["column"] == "G"):
+            try:
+                connection = sqlite3.connect('database.db')
+                cursor = connection.cursor()
+                cursor.execute('UPDATE Scoring SET G = G + 1 WHERE scoringId = ?', (args['scoringId'],))
+                cursor.execute('UPDATE Scoring SET Pts = Pts + 1 WHERE scoringId = ?', (args['scoringId'],))
+                connection.commit()
+                
+                cursor.close()
+            except sqlite3.Error as error:
+                print("Failed to update data into sqlite table", error)
+            finally:
+                if (connection):
+                    connection.close()
+                    print("The SQLite connection is closed")
+        
+        elif(args["column"] == "A"):
+            try:
+                connection = sqlite3.connect('database.db')
+                cursor = connection.cursor()
+                cursor.execute('UPDATE Scoring SET A = A + 1 WHERE scoringId = ?', (args['scoringId'],))
+                cursor.execute('UPDATE Scoring SET Pts = Pts + 1 WHERE scoringId = ?', (args['scoringId'],))
+                connection.commit()
+                
+                cursor.close()
+            except sqlite3.Error as error:
+                print("Failed to update data into sqlite table", error)
+            finally:
+                if (connection):
+                    connection.close()
+                    print("The SQLite connection is closed")
+    elif (args["type"] == "decrement"):
+
+        if(args["column"] == "G"):
+            try:
+                connection = sqlite3.connect('database.db')
+                cursor = connection.cursor()
+                cursor.execute('UPDATE Scoring SET G = G - 1 WHERE scoringId = ?', (args['scoringId'],))
+                cursor.execute('UPDATE Scoring SET Pts = Pts - 1 WHERE scoringId = ?', (args['scoringId'],))
+                connection.commit()
+                
+                cursor.close()
+            except sqlite3.Error as error:
+                print("Failed to update data into sqlite table", error)
+            finally:
+                if (connection):
+                    connection.close()
+                    print("The SQLite connection is closed")
+        
+        elif(args["column"] == "A"):
+            try:
+                connection = sqlite3.connect('database.db')
+                cursor = connection.cursor()
+                cursor.execute('UPDATE Scoring SET A = A - 1 WHERE scoringId = ?', (args['scoringId'],))
+                cursor.execute('UPDATE Scoring SET Pts = Pts - 1 WHERE scoringId = ?', (args['scoringId'],))
+                connection.commit()
+                
+                cursor.close()
+            except sqlite3.Error as error:
+                print("Failed to update data into sqlite table", error)
+            finally:
+                if (connection):
+                    connection.close()
+                    print("The SQLite connection is closed")
+    
+    
+    return redirect(url_for('player_info', playerId=playerId))
+
 if __name__ == '__main__':
     app.run(debug=True)
