@@ -54,7 +54,7 @@
             document.getElementById("cancelAddGoalieButton").style.display = "none";
         }
         function enableAddScoring() {
-            if(document.getElementById("no-scoring-table")) document.getElementById("no-scoring-table").style.display = null;
+            if(document.getElementById("no-scorings-table")) document.getElementById("no-scorings-table").style.display = null;
             document.getElementById("addScoringFormRow").style.display = null;
             document.getElementById("submitAddScoringButton").style.display = null;
             document.getElementById("addScoringButton").style.display = "none";
@@ -62,7 +62,7 @@
         }
 
         function cancelAddScoring() {
-            if(document.getElementById("no-scoring-table")) document.getElementById("no-scoring-table").style.display = "none";
+            if(document.getElementById("no-scorings-table")) document.getElementById("no-scorings-table").style.display = "none";
             document.getElementById("addScoringFormRow").style.display = "none";
             document.getElementById("submitAddScoringButton").style.display = "none";
             document.getElementById("addScoringButton").style.display = null;
@@ -279,9 +279,9 @@
                         <input type="text" name="ScoringPoints" id="addScoringPoints" class="insert-table-input">
                     </td>
                 </tr>
+            </table>
             <input id="submitAddScoringButton" style="display:none;" type="submit" value="submit">
             </form>
-        </table>
             <button id="cancelAddScoringButton" style="display:none;" onclick="cancelAddScoring()">Cancel</button>
             <button id="addScoringButton" style="display: block;" onclick="enableAddScoring()">Add Scoring</button>
 
@@ -436,7 +436,7 @@
                     </td>
                 </tr>
             </table>
-            <button id="submitAddGoalieButton" style="display:none;" type="submit">submit</button>
+                <button id="submitAddGoalieButton" style="display:none;" type="submit">submit</button>
             </form>
             <button id="cancelAddGoalieButton" style="display:none;" onclick="cancelAddGoalie()">Cancel</button>
             <button id="addGoalieButton" style="display: block;" onclick="enableAddGoalie()">Add Goalie</button>

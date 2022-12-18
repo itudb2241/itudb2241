@@ -22,3 +22,15 @@
 
 
 }
+
+tr {
+    padding: 5px 15px;
+}
+
+td {
+    padding: 5px 15px;
+    text-align: center;
+}
+h2{
+    margin: 10px 0px;
+}
