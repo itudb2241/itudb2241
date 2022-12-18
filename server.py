@@ -54,7 +54,7 @@ def players():
 def games():
     connection = sqlite3.connect('database.db')
     cursor = connection.cursor()
-    games = cursor.execute('SELECT playerId, lgId FROM Goalies WHERE playerId NOT NULL').fetchall()
+    games = cursor.execute('SELECT LgId,TmId FROM Teams').fetchall()
     connection.close()
 
     return render_template('games.html', games=games)
