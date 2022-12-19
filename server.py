@@ -108,7 +108,28 @@ def add_award_coach(coachId):
             print("The SQLite connection is closed")
     
     return redirect(url_for('coaches_info', coachId=coachId))
+@app.route("/coach/<coachId>/deleteaward_coach", methods=['GET'])
+def delete_award_coach(coachId):
 
+    args = request.args
+
+    if not args: return redirect(url_for('coaches_info', coachId=coachId))
+
+    try:
+        connection = sqlite3.connect('database.db')
+        cursor = connection.cursor()
+        cursor.execute('DELETE FROM AwardsCoaches WHERE coachId = ?', (args['coachId'],))
+        connection.commit()
+        
+        cursor.close()
+    except sqlite3.Error as error:
+        print("Failed to delete data into sqlite table", error)
+    finally:
+        if (connection):
+            connection.close()
+            print("The SQLite connection is closed")
+    
+    return redirect(url_for('coaches_info', coachId=coachId))
 @app.route('/player/<playerId>')
 def player_info(playerId):
 
