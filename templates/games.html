@@ -16,7 +16,6 @@
         <a href="/">Home</a>
         <a  href="/players">Players</a>
         <a href="/teams">Teams</a>
-        <a href="/coaches">Coaches</a>
         <a class="active" href="/games">Games</a>
         <a href="/stats">Stats</a>
     </nav>
@@ -25,11 +24,11 @@
 <body>
     <div class="container">
         <div id="top-container">
-            <h1>Games information:</h1>
+            <h1>Teams of Stanley Cup(1910-1920s):</h1>
     
         <div id="dropdown-container">
             <p>Select a Year: </p>
-            <select onchange="this.options[this.selectedIndex].value && (window.location.href = '/years/' + this.options[this.selectedIndex].value)" style="width: 400px;" id="dropdown" placeholder="Select a Year">
+            <select onchange="this.options[this.selectedIndex].value && (window.location.href = '/games/' + this.options[this.selectedIndex].value)" style="width: 400px;" id="dropdown" placeholder="Select a Year">
                 <option value="">Select a Year</option>
                 {% for year in years %}
                 <option value="{{year[0]}}">{{ year[0] }}</option>
@@ -54,10 +53,14 @@
         </div>
     <div id="Teams">
         <h2>Nostalgia Teams</h2>
+        {% if tteams%}
         <table>
             <tr>
                 <th>
-                    Team
+                    Year
+                </th>
+                <th>
+                    Team Id
                 </th>
                 <th>
                     Minutes
@@ -72,24 +75,32 @@
                     Ties
                 </th>
             </tr>
+
+            {% for year in tinfo %}
+
             <tr>
                 <td>
-
+                    {{ year[0] }}
                 </td>
                 <td>
-
+                    {{ year[1] }}
                 </td>
                 <td>
-
+                    {{ year[2] }}
                 </td>
                 <td>
-
+                    {{ year[3] }}
                 </td>
                 <td>
-
+                    {{ year[4] }}
+                </td>
+                <td>
+                    {{ year[5] }}
                 </td>
             </tr>
+            {% endfor %}
         </table>
+        {% endif %}
     </div>        
     </div>
     </div>

@@ -57,6 +57,16 @@ def years():
     years = cursor.execute('SELECT DISTINCT Year FROM GoaliesSC').fetchall()
     connection.close()
     return render_template('games.html', years=years)
+@app.route('/games/<Year>')
+def teaminfo(Year):
+    
+    connection = sqlite3.connect('database.db')
+    cursor = connection.cursor()
+    years = cursor.execute('SELECT DISTINCT Year FROM GoaliesSC').fetchall()
+    tinfo = cursor.execute('SELECT Year,TmId,Min,W,L,T FROM GoaliesSC WHERE Year=?',(Year,) ).fetchall()
+    tteams = cursor.execute('SELECT * FROM GoaliesSC WHERE Year = ?', (Year,)).fetchone()
+    connection.close()
+    return render_template('games.html', tinfo=tinfo,tteams=tteams,years=years)
 
 @app.route('/coaches')
 def coaches():
@@ -99,13 +109,6 @@ def add_award_coach(coachId):
     
     return redirect(url_for('coaches_info', coachId=coachId))
 
-#@app.route('/years/<Year>')
-# def teaminfo(Year):
-#    connection= sqlite3.connect('database.db')
-#    cursor=connection.cursor()
-#   nteams=cursor.execute('SELECT Name')
-#    connection.close
-#    return render_template('games.html',nteams=nteams)
 @app.route('/player/<playerId>')
 def player_info(playerId):
 
