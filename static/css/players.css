@@ -44,3 +44,7 @@ h2{
 .insert-table-input {
     width: 100px;
 }
+
+input{
+    color:grey;
+}
