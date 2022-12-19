@@ -63,11 +63,32 @@ def teaminfo(Year):
     connection = sqlite3.connect('database.db')
     cursor = connection.cursor()
     years = cursor.execute('SELECT DISTINCT Year FROM GoaliesSC').fetchall()
-    tinfo = cursor.execute('SELECT Year,TmId,Min,W,L,T FROM GoaliesSC WHERE Year=?',(Year,) ).fetchall()
+    tinfo = cursor.execute('SELECT Year,TmId,Min,W,L,T,GoaliesSCId FROM GoaliesSC WHERE Year=?',(Year,) ).fetchall()
     tteams = cursor.execute('SELECT * FROM GoaliesSC WHERE Year = ?', (Year,)).fetchone()
     connection.close()
     return render_template('games.html', tinfo=tinfo,tteams=tteams,years=years)
+@app.route('/games/<Year>/deleteteam', methods=['GET'])
+def delete_team(Year):
 
+    args = request.args
+
+    if not args: return redirect(url_for('teaminfo', Year=Year))
+
+    try:
+        connection = sqlite3.connect('database.db')
+        cursor = connection.cursor()
+        cursor.execute('DELETE FROM GoaliesSC WHERE GoaliesSCId = ?', (args['GoaliesSCId'],))
+        connection.commit()
+        
+        cursor.close()
+    except sqlite3.Error as error:
+        print("Failed to delete data into sqlite table", error)
+    finally:
+        if (connection):
+            connection.close()
+            print("The SQLite connection is closed")
+    
+    return redirect(url_for('teaminfo', Year=Year))
 @app.route('/coaches')
 def coaches():
     connection = sqlite3.connect('database.db')

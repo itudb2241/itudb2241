@@ -100,7 +100,8 @@ create_tables_commands = [
             L INTEGER,
             T INTEGER,
             SHO INTEGER,
-            GA INTEGER
+            GA INTEGER,
+            GoaliesSCId INTEGER PRIMARY KEY AUTOINCREMENT
         )
     """,
     """
