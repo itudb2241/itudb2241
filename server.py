@@ -76,6 +76,28 @@ def coaches_info(coachId):
     connection.close()
 
     return render_template('coaches.html', coaches=coaches, coach=coach, awards=awards)
+@app.route("/coach/<coachId>/add_award_coach", methods=['POST'])
+def add_award_coach(coachId):
+    award_coachYear = request.form['award_coachYear']
+    award_coachLeague = request.form['award_coachLeague']
+    award_coachName = request.form['award_coachName']
+
+    try:
+        connection = sqlite3.connect('database.db')
+        cursor = connection.cursor()
+        cursor.execute('INSERT INTO AwardsCoaches (coachId, year, lgId, award) VALUES (?, ?, ?, ?)', (coachId, award_coachYear, award_coachLeague, award_coachName))
+        print(cursor.rowcount)
+        connection.commit()
+        
+        cursor.close()
+    except sqlite3.Error as error:
+        print("Failed to insert data into sqlite table", error)
+    finally:
+        if (connection):
+            connection.close()
+            print("The SQLite connection is closed")
+    
+    return redirect(url_for('coaches_info', coachId=coachId))
 
 #@app.route('/years/<Year>')
 # def teaminfo(Year):
